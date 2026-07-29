@@ -4,12 +4,20 @@
     "target": "es2022",
     "moduleResolution": "node",
     "checkJs": false,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.js",
     "tests/**/*.js",
-    "wdio.conf.js"
+    "src/**/*",
+    "tests/**/*",
+    "wdio.conf.js",
   ],
   "exclude": [
     "node_modules",

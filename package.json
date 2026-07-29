@@ -29,7 +29,7 @@
     "automation",
     "e2e"
   ],
-  "author": "",
+  "author": "DheoClaveria_Automation_Testing",
   "license": "ISC",
   "devDependencies": {
     "@wdio/cli": "^9.30.0",

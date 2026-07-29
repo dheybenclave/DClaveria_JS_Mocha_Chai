@@ -2,17 +2,14 @@
 import pino from 'pino';
 import pretty from 'pino-pretty';
 
-// Buffer to hold log lines for the currently running test
 let logBuffer = [];
 
-// Pretty stream for console output (colorized, as before)
 const prettyStream = pretty({
   colorize: true,
   translateTime: 'SYS:standard'
 });
 prettyStream.pipe(process.stdout);
 
-// Custom stream that captures each log line for report attachment
 const captureStream = {
   write(chunk) {
     try {
@@ -39,6 +36,10 @@ export function getLogBuffer() {
 
 export function clearLogBuffer() {
   logBuffer = [];
+}
+
+export function getTestLogger(testTitle, suiteTitle) {
+  return logger.child({ test: testTitle, suite: suiteTitle });
 }
 
 export default logger;

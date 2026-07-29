@@ -3,7 +3,7 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import { createRequire } from 'module';
 import path from 'path';
-import { clearLogBuffer, getLogBuffer } from './src/utils/logger.js';
+import { clearLogBuffer, getLogBuffer, getTestLogger } from './src/utils/logger.js';
 
 const require = createRequire(import.meta.url);
 
@@ -23,6 +23,8 @@ function dedupeSuites(suite) {
 
 const config = {
     runner: 'local',
+    headless: false,
+
     specs: [
         './tests/web/**/*.spec.js',
         './tests/api/**/*.spec.js'
@@ -81,8 +83,11 @@ const config = {
         fs.mkdirSync(reportDirectory, { recursive: true });
     },
     afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+        const testLogger = getTestLogger(test.title, test.fullTitle);
         const logs = getLogBuffer();
         if (logs.length > 0) {
+            testLogger.info(`Application Logs for "${test.title}":`);
+            logs.forEach(log => testLogger.info(log));
             process.emit('wdio-mochawesome-reporter:addContext', {
                 title: 'Application Logs',
                 value: logs.join('\n')

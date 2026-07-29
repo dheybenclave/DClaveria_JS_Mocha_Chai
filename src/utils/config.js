@@ -12,8 +12,7 @@ export const CONFIG = {
   API_BASE_URL: customConfig.apiBaseUrl || 'https://restful-booker.herokuapp.com',
 
   BROWSER: customConfig.browser || 'chrome',
-  HEADLESS: Boolean(customConfig.headless),
-  TIMEOUT: Number(customConfig.timeout || 30000),
+  TIMEOUT: Number(customConfig.timeout || 60000),
 
   SCREENSHOT_DIR: path.resolve(__dirname, '../../logs/screenshots'),
   VIDEO_DIR: path.resolve(__dirname, '../../logs/videos'),

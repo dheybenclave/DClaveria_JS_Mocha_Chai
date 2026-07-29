@@ -1,10 +1,10 @@
-import BasePage from '../base.page.js';
-import logger from '../../../utils/logger.js'; 
 import { expect } from 'chai';
+import logger from '../../../utils/logger.js';
+import BasePage from '../base.page.js';
 
 export default class HomePage extends BasePage {
 
-  get logo() {
+  get logoImage() {
     return $('div.mc6t-logo');
   }
 
@@ -27,14 +27,14 @@ export default class HomePage extends BasePage {
     return $('a[aria-label="Search for flights"]');
   }
 
-
-  async getTextElement(textName) {
-    logger.info(`Finding text element: ${textName}`);
-    const xpath = `//*[contains(normalize-space(.), '${textName}')]`;
-    const element = await $(xpath);
-    expect(await element.isExisting(), `Text element should exist: ${textName}`).to.be.true;
-    return element;
+  get signButton() {
+    return $('div[aria-label="Sign in"][role="button"]');
   }
+
+  get loginDialog() {
+    return $('div[role="dialog"] div[class*="unified-login"]');
+  }
+
 
   async isTextDisplayed(textName) {
     logger.info(`Checking if text is displayed: ${textName}`);
@@ -44,32 +44,32 @@ export default class HomePage extends BasePage {
   }
   async clickCarButton() {
     logger.info('Clicking car button');
-    await this.carButton.click();
+    await this.clickElement(this.carButton);
   }
 
   async clickStayButton() {
     logger.info('Clicking stay button');
-    await this.stayButton.click();
+    await this.clickElement(this.stayButton);
   }
 
   async clickFlightsButton() {
     logger.info('Clicking flights button');
-    await this.flightsButton.click();
+    await this.clickElement(this.flightsButton);
   }
 
   async clickSearchButton() {
     logger.info('Clicking search button');
-    await this.searchButton.click();
+    await this.clickElement(this.searchButton);
   }
 
   async clickLoginButton() {
     logger.info('Clicking login button');
-    await this.loginButton.click();
+    await this.clickElement(this.loginButton);
   }
 
   async isLogoDisplayed() {
     logger.info('Checking if logo is displayed');
-    await this.logo.waitForDisplayed({ timeout: 15000 });
+    await this.logoImage.waitForDisplayed({ timeout: 15000 });
     const displayed = await this.logo.isDisplayed();
     expect(displayed, 'Logo should be displayed').to.be.true;
     return displayed;

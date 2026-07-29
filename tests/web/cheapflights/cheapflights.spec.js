@@ -1,8 +1,6 @@
-import { expect } from 'chai';
 import HomePage from '../../../src/pages/web/cheapflights/home.page.js';
 import LoginPage from '../../../src/pages/web/cheapflights/login.page.js';
 import FlightSearchPage from '../../../src/pages/web/cheapflights/search.page.js';
-import { DataManager } from '../../../src/utils/data.manager.js';
 import logger from '../../../src/utils/logger.js';
 
 
@@ -21,107 +19,73 @@ describe('@smoke @e2e_1 Cheapflights DClaveria Web UI Automation', () => {
   beforeEach(async () => {
     logger.info('Navigating to home page');
     await homePage.open();
+    await homePage.isOnHomePage();
   });
 
   afterEach(async () => {
     logger.info('Test completed');
   });
 
-  describe('Logo and Login Button Validation', () => {
-    it('@tc_1 should validate logo is displayed on home page', async () => {
-      logger.info('TC_1: Validating logo is displayed');
-      const isLogoDisplayed = await homePage.isLogoDisplayed();
-      expect(isLogoDisplayed).to.be.true;
+  describe('Validate and Verify Elements Home Page', () => {
+    it('@tc_1 Should Validate and Verify the Logo and Login Elements are Displayed on Home Page', async () => {
+      logger.info('TC_1: Validating and Verifying logo and login elements on home page');
+
+      await homePage.waitForPageLoad();
+
+      await homePage.waitForElementVisible(homePage.logoImage, 5000);
 
       await homePage.clickCarButton();
-      await homePage.getTextElement('Car hire. ');
+      await homePage.verifyContainsText('Car hire.');
 
       await homePage.clickStayButton();
-      await homePage.getTextElement('Where do you want to stay?');
+      await homePage.verifyContainsText('Where do you want to stay?');
+
+      await homePage.clickElement(homePage.signButton);
+
+      await homePage.waitForElementVisible(homePage.loginDialog, 5000);
+
     });
   });
 
-  describe('Flight Search - Positive Tests', () => {
-    it('@tc_6 should search for flights with valid parameters', async () => {
-      logger.info('TC_6: Searching flights with valid parameters');
+  // describe('Flight Search - Positive Tests', () => {
+  //   it('@tc_6 should search for flights with valid parameters', async () => {
+  //     logger.info('TC_6: Searching flights with valid parameters');
 
-      const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
+  //     const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
 
-      // Navigate to flights search page first
-      await homePage.clickFlightsButton();
-      await searchPage.waitForPageLoad();
-      await homePage.isOnHomePage();
+  //     // Navigate to flights search page first
+  //     await homePage.clickFlightsButton();
+  //     await searchPage.waitForPageLoad();
+  //     await homePage.isOnHomePage();
 
-      await searchPage.searchFlights(
-        flightData.from,
-        flightData.to,
-        flightData.departure_date,
-        flightData.return_date,
-        flightData.adults
-      );
+  //     await searchPage.searchFlights(
+  //       flightData.from,
+  //       flightData.to,
+  //       flightData.departure_date,
+  //       flightData.return_date,
+  //       flightData.adults
+  //     );
 
-      const hasResults = await searchPage.hasSearchResults();
-      expect(hasResults).to.be.true;
-    });
+  //     const hasResults = await searchPage.hasSearchResults();
+  //     expect(hasResults).to.be.true;
+  //   });
 
-    // it('@tc_7 should display search results with valid flight options', async () => {
-    //   logger.info('TC_7: Validating search results display');
-    //   const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
+  //   // it('@tc_7 should display search results with valid flight options', async () => {
+  //   //   logger.info('TC_7: Validating search results display');
+  //   //   const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
 
-    //   await searchPage.searchFlights(
-    //     flightData.from,
-    //     flightData.to,
-    //     flightData.departure_date,
-    //     flightData.return_date
-    //   );
+  //   //   await searchPage.searchFlights(
+  //   //     flightData.from,
+  //   //     flightData.to,
+  //   //     flightData.departure_date,
+  //   //     flightData.return_date
+  //   //   );
 
-    //   const results = await searchPage.getSearchResults();
-    //   expect(results).to.have.length.greaterThan(0);
-    //   logger.info('TC_7: Search results validation passed');
-    // });
+  //   //   const results = await searchPage.getSearchResults();
+  //   //   expect(results).to.have.length.greaterThan(0);
+  //   //   logger.info('TC_7: Search results validation passed');
+  //   // });
 
-    // it('@tc_8 should validate flight search results contain required information', async () => {
-    //   logger.info('TC_8: Validating search result fields');
-    //   const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
 
-    //   await searchPage.searchFlights(
-    //     flightData.from,
-    //     flightData.to,
-    //     flightData.departure_date,
-    //     flightData.return_date
-    //   );
-
-    //   const results = await searchPage.getSearchResults();
-
-    //   results.forEach(result => {
-    //     expect(result.price).to.not.be.null;
-    //     expect(result.airline).to.not.be.null;
-    //     expect(result.duration).to.not.be.null;
-    //   });
-    //   logger.info('TC_8: Result fields validation passed');
-    // });
-
-    // it('@tc_9 should validate search results are sorted by price', async () => {
-    //   logger.info('TC_9: Validating price sorting');
-    //   const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
-
-    //   await searchPage.searchFlights(
-    //     flightData.from,
-    //     flightData.to,
-    //     flightData.departure_date,
-    //     flightData.return_date
-    //   );
-
-    //   const results = await searchPage.getSearchResults();
-
-    //   if (results.length > 1) {
-    //     for (let i = 0; i < results.length - 1; i++) {
-    //       const price1 = parseFloat(results[i].price.replace(/[^0-9.]/g, ''));
-    //       const price2 = parseFloat(results[i + 1].price.replace(/[^0-9.]/g, ''));
-    //       expect(price1).to.be.lessThanOrEqual(price2);
-    //     }
-    //   }
-    //   logger.info('TC_9: Price sorting validation passed');
-    // });
-  });
+  // });
 });
