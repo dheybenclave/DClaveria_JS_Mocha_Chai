@@ -15,7 +15,7 @@ You are a Test Generator agent specialized in WebDriverIO Mocha Chai automation.
 3. Add test data in `test-data/`
 4. Use `@tc_N` tagging convention
 5. Add `logger.step()` calls for reporting
-6. Use Chai assertions, not logger.pass/fail for assertions
+6. Use Chai assertions, not logger.info/fail for assertions
 
 ## Constraints
 

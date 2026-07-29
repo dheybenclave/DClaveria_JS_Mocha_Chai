@@ -1,34 +1,33 @@
 import { expect } from 'chai';
 import BookingAPIBase from '../../../src/pages/api/restful-booker/booking.api.js';
 import { DataManager } from '../../../src/utils/data.manager.js';
-import { APIRequestHelper } from '../../../src/utils/api.helpers.js';
 import { logger } from '../../../src/utils/logger.js';
 
-describe('[api][restful-booker] Restful Booker API Automation', () => {
+describe('@api @api_e2e_1 Restful Booker API Automation', () => {
   let bookingAPI;
   let createdBookingId;
 
   before(() => {
     bookingAPI = new BookingAPIBase();
-    logger.step('API test suite initialized');
+    logger.info('API test suite initialized');
   });
 
   afterEach(async () => {
     if (createdBookingId) {
       try {
-        logger.step(`Cleaning up booking ID: ${createdBookingId}`);
+        logger.info(`Cleaning up booking ID: ${createdBookingId}`);
         await bookingAPI.deleteBooking(createdBookingId);
-        logger.pass(`Cleanup completed for booking ${createdBookingId}`);
+        logger.info(`Cleanup completed for booking ${createdBookingId}`);
       } catch (error) {
-        logger.fail(`Cleanup failed for booking ${createdBookingId}: ${error.message}`);
+        logger.error(`Cleanup failed for booking ${createdBookingId}: ${error.message}`);
       }
       createdBookingId = null;
     }
   });
 
-  describe('[api][positive][create] CreateBooking API - Positive Tests', () => {
-    it('[api][positive][create] @tc_16 should create a new booking with valid data', async () => {
-      logger.step('TC_16: Creating new booking with valid data');
+  describe('@api CreateBooking API - Positive Tests', () => {
+    it('@api @api_tc_1 should create a new booking with valid data', async () => {
+      logger.info('TC_API_1: Creating new booking with valid data');
       const validBooking = DataManager.getApiData('booking_test_data.json').valid_bookings[0];
 
       const result = await bookingAPI.createBooking(validBooking);
@@ -42,7 +41,7 @@ describe('[api][restful-booker] Restful Booker API Automation', () => {
       expect(result.json.booking.depositpaid).to.equal(validBooking.depositpaid);
 
       createdBookingId = result.json.bookingid;
-      logger.pass(`TC_16: Booking created successfully with ID: ${createdBookingId}`);
+      logger.info(`TC_API_1: Booking created successfully with ID: ${createdBookingId}`);
     });
   });
 });

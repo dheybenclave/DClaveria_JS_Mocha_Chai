@@ -18,7 +18,7 @@ npm run agentic:generate -- --requirement="user can search for flights"
 1. Parse requirement
 2. Create page object methods
 3. Create spec file with `@tc_` tags
-4. Add logger.step() calls
+4. Add logger.info() calls
 5. Run collection to verify
 
 ## Output

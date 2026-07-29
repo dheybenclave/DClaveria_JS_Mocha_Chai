@@ -35,7 +35,7 @@ searchFlights(from, to) {
 try {
     await this.loginButton.click();
 } catch (error) {
-    logger.fail(`Login failed: ${error.message}`);
+    logger.info(`Login failed: ${error.message}`);
     throw error;
 }
 ```

@@ -24,7 +24,7 @@ export default class LoginPage extends BasePage {
   }
 
   async login(email, password) {
-    logger.step(`Logging in with email: ${email}`);
+    logger.info(`Logging in with email: ${email}`);
     await this.emailInput.setValue(email);
     expect(await this.emailInput.getValue(), 'Email should be entered').to.equal(email);
     await this.passwordInput.setValue(password);
@@ -33,7 +33,7 @@ export default class LoginPage extends BasePage {
   }
 
   async getErrorMessage() {
-    logger.step('Getting error message');
+    logger.info('Getting error message');
     expect(await this.errorMessage.isDisplayed(), 'Error message should be displayed').to.be.true;
     const text = await this.errorMessage.getText();
     expect(text, 'Error message text should not be empty').to.not.be.empty;
@@ -41,7 +41,7 @@ export default class LoginPage extends BasePage {
   }
 
   async isLoginSuccessful() {
-    logger.step('Checking if login was successful');
+    logger.info('Checking if login was successful');
     const url = await browser.getUrl();
     const success = !url.includes('login');
     expect(success, `Expected successful login, but still on login page: ${url}`).to.be.true;

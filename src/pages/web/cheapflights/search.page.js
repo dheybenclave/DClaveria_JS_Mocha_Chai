@@ -1,8 +1,9 @@
-import BasePage from '../base.page.js';
-import { logger } from '../../../utils/logger.js';
 import { expect } from 'chai';
+import logger from '../../../utils/logger.js';
+import BasePage from '../base.page.js';
 
 export default class FlightSearchPage extends BasePage {
+  
   get fromCityInput() {
     return $('[data-testid="from-input"], input[placeholder*="From"], input[name="from"]');
   }
@@ -36,32 +37,50 @@ export default class FlightSearchPage extends BasePage {
   }
 
   async searchFlights(from, to, departureDate, returnDate, adults = 1) {
-    logger.step(`Searching flights: ${from} -> ${to}, Departure: ${departureDate}, Return: ${returnDate}, Adults: ${adults}`);
+    logger.info(`Searching flights: ${from} -> ${to}, Departure: ${departureDate}, Return: ${returnDate}, Adults: ${adults}`);
+    await this.waitForElementClickable(this.fromCityInput, 30000);
     await this.fromCityInput.setValue(from);
     expect(await this.fromCityInput.getValue(), `From city should be set: ${from}`).to.equal(from);
+    await this.waitForElementClickable(this.toCityInput, 30000);
     await this.toCityInput.setValue(to);
     expect(await this.toCityInput.getValue(), `To city should be set: ${to}`).to.equal(to);
+    await this.waitForElementClickable(this.departureDateInput, 30000);
     await this.departureDateInput.setValue(departureDate);
     expect(await this.departureDateInput.getValue(), `Departure date should be set: ${departureDate}`).to.equal(departureDate);
+    await this.waitForElementClickable(this.returnDateInput, 30000);
+    await this.returnDateInput.setValue(returnDate);
+    expect(await this.returnDateInput.getValue(), `Return date should be set: ${returnDate}`).to.equal(returnDate);
+    
+await this.waitForElementClickable(this.fromCityInput, 30000);
+    await this.fromCityInput.setValue(from);
+    expect(await this.fromCityInput.getValue(), `From city should be set: ${from}`).to.equal(from);
+    await this.waitForElementClickable(this.toCityInput, 30000);
+    await this.toCityInput.setValue(to);
+    expect(await this.toCityInput.getValue(), `To city should be set: ${to}`).to.equal(to);
+    await this.waitForElementClickable(this.departureDateInput, 30000);
+    await this.departureDateInput.setValue(departureDate);
+    expect(await this.departureDateInput.getValue(), `Departure date should be set: ${departureDate}`).to.equal(departureDate);
+    await this.waitForElementClickable(this.returnDateInput, 30000);
     await this.returnDateInput.setValue(returnDate);
     expect(await this.returnDateInput.getValue(), `Return date should be set: ${returnDate}`).to.equal(returnDate);
     
     for (let i = 1; i < adults; i++) {
-      const adultSelector = $('[data-testid="adult-plus"], .adult-selector .plus');
-      if (await adultSelector.isDisplayed()) {
-        logger.step(`Increasing adult count: ${i + 1}`);
-        await adultSelector.click();
-      }
+        const adultSelector = $('[data-testid="adult-plus"], .adult-selector .plus');
+        if (await adultSelector.isDisplayed()) {
+            logger.info(`Increasing adult count: ${i + 1}`);
+            await adultSelector.click();
+        }
     }
     
-    logger.step('Clicking search button');
+    logger.info('Clicking search button');
+    await this.waitForElementClickable(this.searchButton, 30000);
     await this.searchButton.click();
     await this.waitForSearchResults();
     await this.searchResultsContainer.waitForDisplayed({ timeout: 30000 });
-  }
+}
 
   async waitForSearchResults(timeout = 60000) {
-    logger.step(`Waiting for search results (timeout: ${timeout}ms)`);
+    logger.info(`Waiting for search results (timeout: ${timeout}ms)`);
     await browser.waitUntil(
       async () => {
         const isVisible = await this.searchResultsContainer.isDisplayed();
@@ -76,7 +95,7 @@ export default class FlightSearchPage extends BasePage {
   }
 
   async getSearchResults() {
-    logger.step('Fetching search results');
+    logger.info('Fetching search results');
     await this.waitForSearchResults();
     const results = await $$('[data-testid="flight-result"], .flight-result');
     expect(results.length, 'Should have search results').to.be.greaterThan(0);
@@ -99,7 +118,7 @@ export default class FlightSearchPage extends BasePage {
   }
 
   async hasSearchResults() {
-    logger.step('Checking if search results exist');
+    logger.info('Checking if search results exist');
     const isVisible = await this.searchResultsContainer.isDisplayed();
     const count = await $$('[data-testid="flight-result"], .flight-result').length;
     const hasResults = isVisible && count > 0;

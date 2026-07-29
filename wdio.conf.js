@@ -1,4 +1,27 @@
-export const config = {
+// wdio.conf.js
+import { execSync } from 'child_process';
+import fs from 'fs';
+import { createRequire } from 'module';
+import path from 'path';
+import { clearLogBuffer, getLogBuffer } from './src/utils/logger.js';
+
+const require = createRequire(import.meta.url);
+
+// Fix for upstream wdio-mochawesome-reporter bug: nested describe blocks
+// get pushed twice into the suite tree (see onSuiteEnd in their source —
+// it tracks only one `currSuite` reference with no stack for nesting).
+function dedupeSuites(suite) {
+    if (!suite || !Array.isArray(suite.suites)) return;
+    const seen = new Set();
+    suite.suites = suite.suites.filter(child => {
+        if (seen.has(child.uuid)) return false;
+        seen.add(child.uuid);
+        return true;
+    });
+    suite.suites.forEach(dedupeSuites);
+}
+
+const config = {
     runner: 'local',
     specs: [
         './tests/web/**/*.spec.js',
@@ -9,15 +32,18 @@ export const config = {
         regression: ['./tests/web/cheapflights/cheapflights.spec.js'],
         api: ['./tests/api/booking/booking.spec.js']
     },
-    config: {
-        baseUrl: 'https://www.cheapflights.com.au',
-        apiBaseUrl: 'https://restful-booker.herokuapp.com',
-        browser: 'chrome',
-        headless: false,
-        timeout: 30000,
-        apiUsername: 'admin',
-        apiPassword: 'password123',
-        openMochawesomeReport: true
+    logLevel: 'warn',
+    logLevels: {
+        webdriver: 'error',
+        webdriverio: 'error',
+        '@wdio/cli': 'warn',
+        '@wdio/runner': 'warn',
+        '@wdio/mocha-framework': 'warn'
+    },
+    framework: 'mocha',
+    mochaOpts: {
+        ui: 'bdd',
+        timeout: 60000
     },
     maxInstances: 5,
     capabilities: [{
@@ -32,65 +58,121 @@ export const config = {
             excludeSwitches: ['enable-logging']
         }
     }],
-    logLevel: 'warn',
-    logLevels: {
-        webdriver: 'error',
-        webdriverio: 'error',
-        '@wdio/cli': 'warn',
-        '@wdio/runner': 'warn',
-        '@wdio/mocha-framework': 'warn'
-    },
-    framework: 'mocha',
-
-    mochaOpts: {
-        ui: 'bdd',
-        timeout: 60000 // Test case timeout limits (1 minute)
-    },
-    // Attach the terminal reporter alongside the HTML reporter
     reporters: [
         'spec',
-        ['mochawesome', {
-            outputDir: './reports',
-            mochawesome_filename: 'test-report.json',
-            includeScreenshots: true,          // Tells reporter to check for captured images
-            screenshotUseRelativePath: true   // Helps local report find screenshots correctly
-        }]
+        [
+            'mochawesome',
+            {
+                outputDir: './reports',
+                includeScreenshots: true,
+                screenshotUseRelativePath: true,
+                outputFileFormat: function (opts) {
+                    return `results-${opts.cid}.json`;
+                }
+            }
+        ]
     ],
-
-    /**
-      * HOOK 1: AUTO-CLEANUP
-      * Runs ONCE before any browser workers or test threads are launched.
-      */
     onPrepare: function (config, capabilities) {
         const reportDirectory = './reports';
-
         if (fs.existsSync(reportDirectory)) {
-            console.log(`🧹 Cleaning historical records from: ${reportDirectory}`);
+            console.log('Cleaning historical records from: ' + reportDirectory);
             fs.rmSync(reportDirectory, { recursive: true, force: true });
         }
+        fs.mkdirSync(reportDirectory, { recursive: true });
     },
     afterTest: async function (test, context, { error, result, duration, passed, retries }) {
-        // If the test case failed, take a screenshot immediately
+        const logs = getLogBuffer();
+        if (logs.length > 0) {
+            process.emit('wdio-mochawesome-reporter:addContext', {
+                title: 'Application Logs',
+                value: logs.join('\n')
+            });
+        }
+        clearLogBuffer();
+
         if (!passed) {
             await browser.takeScreenshot();
         }
     },
-     /**
-     * HOOK 2: AUTO-COMPILE & AUTO-OPEN
-     * Runs ONCE after all worker threads shut down and tests completely finish.
-     */
-    onComplete: function (exitCode, config, capabilities, results) {
-        console.log('📊 Building HTML Summary Reports...');
-        
+    onComplete: async function (exitCode, config, capabilities, results) {
+        console.log('Generating Mochawesome reports...');
+
         try {
-            // Compile the telemetry JSON into an interactive index.html page
-            execSync('npx marge ./reports/test-report.json --reportDir ./reports --reportFilename index.html');
-            
-            console.log('🚀 Launching report dashboard inside browser...');
-            // Automatically opens the HTML report natively across Mac, Windows, or Linux
-            execSync('npx open-cli ./reports/index.html');
+            const reportsDir = './reports';
+            if (!fs.existsSync(reportsDir)) {
+                console.log('Reports directory does not exist.');
+                return;
+            }
+
+            // Read raw output directory files
+            const files = fs.readdirSync(reportsDir);
+            console.log('Raw files in directory:', files);
+
+            // Filter for the dynamic json result objects
+            const jsonFiles = files.filter(f => f.endsWith('.json') && f !== 'wdio-ma-merged.json');
+            console.log('JSON data files found:', jsonFiles);
+
+            if (jsonFiles.length > 0 || files.some(f => f.includes('mochawesome'))) {
+                try {
+                    const marge = require('mochawesome-report-generator');
+                    const { merge } = require('mochawesome-merge');
+
+                    console.log('Merging JSON test reports...');
+                    // Merge all separate worker fragments into one main schema object
+                    const jsonGlob = path.join(reportsDir, '*.json').split(path.sep).join('/');
+                    const mergedJson = await merge({
+                        files: [jsonGlob],
+                    });
+
+                    // Fix upstream duplicate-suite bug before generating the HTML
+                    if (mergedJson.results) {
+                        mergedJson.results.forEach(dedupeSuites);
+                    }
+
+                    const mergedJsonPath = path.join(reportsDir, 'wdio-ma-merged.json');
+                    fs.writeFileSync(mergedJsonPath, JSON.stringify(mergedJson, null, 2));
+
+                    console.log('Compiling HTML report via marge...');
+                    await marge.create(mergedJson, {
+                        reportDir: reportsDir,
+                        reportFilename: 'mochawesome',
+                        reportTitle: 'DClaveria Web UI Automation',
+                        inline: true,
+                        charts: true
+                    });
+
+                    console.log('HTML report generated successfully.');
+                } catch (error) {
+                    console.error('Failed to parse or merge JSON files:', error.message);
+                }
+            } else {
+                console.log('No raw JSON files found for report generation.');
+            }
+
+            // Auto open the compiled view in your machine's browser
+            if (config.openMochawesomeReport) {
+                try {
+                    const updatedFiles = fs.readdirSync(reportsDir);
+                    const htmlFile = updatedFiles.find(f => f.endsWith('.html'));
+                    if (htmlFile) {
+                        const reportPath = path.resolve(path.join(reportsDir, htmlFile));
+                        console.log(`Opening report: ${reportPath}`);
+
+                        const startCmd = process.platform === 'win32' ? 'start ""' : process.platform === 'darwin' ? 'open' : 'xdg-open';
+                        execSync(`${startCmd} "${reportPath}"`, { stdio: 'ignore' });
+                    } else {
+                        console.log('No HTML report found to open.');
+                    }
+                } catch (openError) {
+                    console.log(`Could not open browser: ${openError.message}`);
+                }
+            } else {
+                console.log('Skipping auto-open (openMochawesomeReport not set).');
+            }
         } catch (error) {
-            console.error('⚠️ Failed to compile or display report:', error.message);
+            console.error('Report generation failed:', error.message);
         }
     }
-}
+};
+
+export { config };

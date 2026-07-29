@@ -48,3 +48,5 @@ temp/
 .kilo/agent-manager.json
 .kilo/worktrees/
 .kilo/learning/
+
+reports/

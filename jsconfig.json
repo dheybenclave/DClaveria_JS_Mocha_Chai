@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2022",
+    "moduleResolution": "node",
+    "checkJs": false,
+    "baseUrl": "."
+  },
+  "include": [
+    "src/**/*.js",
+    "tests/**/*.js",
+    "wdio.conf.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "reports"
+  ]
+}

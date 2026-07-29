@@ -15,7 +15,7 @@ console.log(`🎯 Generate Test from Requirement: "${requirement}"\n`);
 const specTemplate = `import { expect } from 'chai';
 import HomePage from '../../../src/pages/web/cheapflights/home.page.js';
 import FlightSearchPage from '../../../src/pages/web/cheapflights/search.page.js';
-import { logger } from '../../../src/utils/logger.js';
+import logger from '../../../src/utils/logger.js'; 
 
 describe('Generated Test: ${requirement}', () => {
     let homePage;
@@ -24,16 +24,16 @@ describe('Generated Test: ${requirement}', () => {
     before(() => {
         homePage = new HomePage();
         searchPage = new FlightSearchPage();
-        logger.step('Test suite initialized');
+        logger.info('Test suite initialized');
     });
 
     beforeEach(async () => {
-        logger.step('Navigating to home page');
+        logger.info('Navigating to home page');
         await homePage.open();
     });
 
     it('@tc_N should ${requirement}', async () => {
-        logger.step('Executing: ${requirement}');
+        logger.info('Executing: ${requirement}');
         // TODO: Implement test steps based on requirement
         expect(true, 'Test placeholder').to.be.true;
     });
