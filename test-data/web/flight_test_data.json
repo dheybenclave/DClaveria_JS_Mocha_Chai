@@ -1,0 +1,48 @@
+{
+  "valid_flights": [
+    {
+      "from": "Sydney",
+      "to": "Melbourne",
+      "departure_date": "2025-09-01",
+      "return_date": "2025-09-10",
+      "adults": 1
+    },
+    {
+      "from": "Brisbane",
+      "to": "Perth",
+      "departure_date": "2025-10-01",
+      "return_date": "2025-10-15",
+      "adults": 2
+    }
+  ],
+  "invalid_flights": [
+    {
+      "from": "InvalidCity",
+      "to": "Melbourne",
+      "departure_date": "2025-09-01",
+      "return_date": "2025-09-10",
+      "expected_error": "No flights available"
+    }
+  ],
+  "invalid_dates": [
+    {
+      "from": "Sydney",
+      "to": "Melbourne",
+      "departure_date": "2020-01-01",
+      "return_date": "2020-01-02",
+      "expected_error": "Invalid date"
+    }
+  ],
+  "credentials": [
+    {
+      "email": "valid@email.com",
+      "password": "ValidPassword123!",
+      "expected_result": "success"
+    },
+    {
+      "email": "invalid@email.com",
+      "password": "WrongPassword123!",
+      "expected_result": "error"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+---
+name: agentic-ci-cd
+description: "Agentic CI/CD pipeline for test automation."
+---
+
+# Agentic CI/CD
+
+Agentic workflow for continuous test automation.
+
+## Triggers
+
+- Push to `master`
+- Pull request to `master`
+- Manual dispatch with test filter
+
+## Pipeline
+
+1. **Setup**: Node.js + dependencies
+2. **Test**: WDIO with optional filter
+3. **Report**: Mochawesome HTML report
+4. **Artifacts**: Upload report + screenshots on failure
+
+## Agent Integration
+
+- Test Planner: Analyze coverage gaps
+- Test Generator: Create missing tests
+- Test Healer: Fix failing tests
+- Test Executor: Monitor pipeline

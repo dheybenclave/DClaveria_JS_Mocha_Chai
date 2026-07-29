@@ -1,0 +1,42 @@
+{
+  "valid_bookings": [
+    {
+      "firstname": "John",
+      "lastname": "Doe",
+      "totalprice": 150,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2025-09-01",
+        "checkout": "2025-09-10"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    {
+      "firstname": "Jane",
+      "lastname": "Smith",
+      "totalprice": 200,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2025-10-01",
+        "checkout": "2025-10-05"
+      },
+      "additionalneeds": "Lunch"
+    }
+  ],
+  "invalid_bookings": [
+    {
+      "firstname": "",
+      "lastname": "",
+      "totalprice": 150,
+      "expected_error": "validation error"
+    }
+  ],
+  "update_data": [
+    {
+      "firstname": "UpdatedJohn",
+      "lastname": "UpdatedDoe",
+      "totalprice": 250,
+      "additionalneeds": "Dinner"
+    }
+  ]
+}

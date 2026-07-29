@@ -1,0 +1,47 @@
+{
+  "name": "DClaveria_JS_Mocha_Chai",
+  "version": "1.0.0",
+  "description": "Web and API Automation Framework using WebDriverIO, Mocha, and Chai",
+  "type": "module",
+  "scripts": {
+    "test": "wdio run ./wdio.conf.js",
+    "test:parallel": "wdio run ./wdio.conf.js --maxInstances=5",
+    "test:chrome": "wdio run ./wdio.conf.js --capabilities.chrome",
+    "test:firefox": "wdio run ./wdio.conf.js --capabilities.firefox",
+    "test:api": "wdio run ./wdio.conf.js --specs ./tests/api/**/*.spec.js --maxInstances=5",
+    "test:web": "wdio run ./wdio.conf.js --specs ./tests/web/**/*.spec.js --maxInstances=5",
+    "test:tag": "wdio run ./wdio.conf.js --suite regression --config.openMochawesomeReport=true --maxInstances=5",
+    "test:tc1": "wdio run ./wdio.conf.js --suite regression --mochaOpts.grep='@tc_1' --config.openMochawesomeReport=true --maxInstances=5",
+    "wdio": "wdio run ./wdio.conf.js",
+    "report": "start mochawesome-report/report.html",
+    "agentic:bootstrap": "node .kilo/scripts/bootstrap.js",
+    "agentic:heal": "node .kilo/scripts/heal.js",
+    "agentic:generate": "node .kilo/scripts/generate.js",
+    "lint": "eslint src/ tests/ specs/ --ext .js",
+    "generate-html": "marge ./reports/test-report.json --reportDir ./reports --reportFilename index.html"
+  },
+  "keywords": [
+    "webdriverio",
+    "mocha",
+    "chai",
+    "automation",
+    "e2e"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wdio/cli": "^9.30.0",
+    "@wdio/local-runner": "^9.30.0",
+    "@wdio/mocha-framework": "^9.30.0",
+    "@wdio/spec-reporter": "^9.29.1",
+    "eslint": "^9.0.0",
+    "eslint-plugin-wdio": "^9.0.0",
+    "mochawesome": "^7.1.4",
+    "mochawesome-report-generator": "^6.3.2",
+    "wdio-mochawesome-reporter": "^7.0.0"
+  },
+  "dependencies": {
+    "chai": "^5.0.0",
+    "dotenv": "^16.4.5"
+  }
+}

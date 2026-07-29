@@ -1,0 +1,17 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "model": "kilo/auto/free",
+  "permission": {
+    "bash": "allow"
+  },
+  "mcp": {
+    "webapp-testing": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+name: WDIO Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      run_parallel:
+        description: 'Run test in parallel?'
+        required: true
+        type: boolean
+        default: false
+      test_filter:
+        description: 'Run specific test (e.g., --mochaOpts.grep="@tc_1")'
+        required: false
+        default: ''
+      open_report:
+        description: 'Open mochawesome report?'
+        type: boolean
+        default: true
+
+jobs:
+  automation-suite:
+    runs-on: windows-latest
+    env:
+      BASE_URL: https://www.cheapflights.com.au
+      API_BASE_URL: https://restful-booker.herokuapp.com
+      HEADLESS: "true"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run WDIO tests
+        run: |
+          if [ "${{ github.event.inputs.test_filter }}" != "" ]; then
+            npx wdio run ./wdio.conf.js --suite regression --mochaOpts.grep="${{ github.event.inputs.test_filter }}" --config.openMochawesomeReport=${{ github.event.inputs.open_report }}
+          else
+            npx wdio run ./wdio.conf.js --suite regression --config.openMochawesomeReport=${{ github.event.inputs.open_report }}
+          fi
+
+      - name: Upload mochawesome report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mochawesome-report
+          path: mochawesome-report/
+          retention-days: 30
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: logs/screenshots/
+          retention-days: 7
