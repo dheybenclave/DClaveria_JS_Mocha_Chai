@@ -1,14 +1,25 @@
-import { CONFIG } from '../../../utils/config.js';
-import { APIRequestHelper } from '../../../utils/api.helpers.js';
-import { logger } from '../../../utils/logger.js';
+import { CONFIG } from '../utils/config.js';
+import { APIRequestHelper } from '../utils/api.helpers.js';
+import { logger } from '../utils/logger.js';
 import { expect } from 'chai';
 
+/**
+ * Base API page object for Restful Booker CRUD operations.
+ * Handles authentication, booking lifecycle, and response validation.
+ */
 export default class BookingAPIBase {
+  /**
+   * Initializes the API base URL and auth token holder.
+   */
   constructor() {
     this.baseUrl = CONFIG.API_BASE_URL;
     this.authToken = null;
   }
 
+  /**
+   * Retrieves a cached auth token or fetches a new one from the API.
+   * @returns {Promise<string>} Auth token string.
+   */
   async getAuthToken() {
     if (!this.authToken) {
       logger.info('Getting auth token');
@@ -32,6 +43,19 @@ export default class BookingAPIBase {
     return this.authToken;
   }
 
+  /**
+   * Creates a new booking using the provided booking data.
+   * @param {Object} [bookingData={}] - Booking fields to override defaults.
+   * @param {string} [bookingData.firstname] - First name.
+   * @param {string} [bookingData.lastname] - Last name.
+   * @param {number} [bookingData.totalprice] - Total price.
+   * @param {boolean} [bookingData.depositpaid] - Whether deposit is paid.
+   * @param {Object} [bookingData.bookingdates] - Booking date range.
+   * @param {string} [bookingData.bookingdates.checkin] - Check-in date.
+   * @param {string} [bookingData.bookingdates.checkout] - Check-out date.
+   * @param {string} [bookingData.additionalneeds] - Additional needs.
+   * @returns {Promise<{response: Response, status: number, json: Object}>} Created booking response.
+   */
   async createBooking(bookingData = {}) {
     logger.info('Creating new booking');
     const payload = APIRequestHelper.getBookingPayload(bookingData);
@@ -57,6 +81,11 @@ export default class BookingAPIBase {
     };
   }
 
+  /**
+   * Retrieves a booking by its ID.
+   * @param {number|string} bookingId - Booking ID to retrieve.
+   * @returns {Promise<{response: Response, status: number, json: Object}>} Booking response.
+   */
   async getBookingById(bookingId) {
     logger.info(`Getting booking by ID: ${bookingId}`);
     expect(bookingId, 'Booking ID should be provided').to.not.be.undefined;
@@ -78,6 +107,15 @@ export default class BookingAPIBase {
     };
   }
 
+  /**
+   * Retrieves bookings filtered by provided criteria.
+   * @param {Object} [filters={}] - Filter parameters.
+   * @param {string} [filters.firstname] - Filter by first name.
+   * @param {string} [filters.lastname] - Filter by last name.
+   * @param {string} [filters.checkin] - Filter by check-in date.
+   * @param {string} [filters.checkout] - Filter by check-out date.
+   * @returns {Promise<{response: Response, status: number, json: Array}>} Filtered bookings response.
+   */
   async getBookingsByFilter(filters = {}) {
     logger.info(`Getting bookings by filter: ${JSON.stringify(filters)}`);
     const queryParams = new URLSearchParams();
@@ -104,6 +142,13 @@ export default class BookingAPIBase {
     };
   }
 
+  /**
+   * Fully updates an existing booking.
+   * @param {number|string} bookingId - Booking ID to update.
+   * @param {Object} bookingData - Booking fields to update.
+   * @param {boolean} [partial=false] - If true, performs a PATCH instead of PUT.
+   * @returns {Promise<{response: Response, status: number, json: Object}>} Updated booking response.
+   */
   async updateBooking(bookingId, bookingData, partial = false) {
     const token = await this.getAuthToken();
     logger.info(`Updating booking ID: ${bookingId}`);
@@ -111,8 +156,9 @@ export default class BookingAPIBase {
     logger.debug(`Update payload: ${JSON.stringify(payload)}`);
     expect(bookingId, 'Booking ID should be provided for update').to.not.be.undefined;
     
+    const method = partial ? 'PATCH' : 'PUT';
     const response = await fetch(`${this.baseUrl}/booking/${bookingId}`, {
-      method: 'PUT',
+      method,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -131,6 +177,12 @@ export default class BookingAPIBase {
     };
   }
 
+  /**
+   * Partially updates an existing booking.
+   * @param {number|string} bookingId - Booking ID to patch.
+   * @param {Object} bookingData - Partial booking fields to update.
+   * @returns {Promise<{response: Response, status: number, json: Object}>} Patched booking response.
+   */
   async partialUpdateBooking(bookingId, bookingData) {
     const token = await this.getAuthToken();
     logger.info(`Partially updating booking ID: ${bookingId}`);
@@ -158,6 +210,11 @@ export default class BookingAPIBase {
     };
   }
 
+  /**
+   * Deletes a booking by ID.
+   * @param {number|string} bookingId - Booking ID to delete.
+   * @returns {Promise<{response: Response, status: number}>} Delete response.
+   */
   async deleteBooking(bookingId) {
     const token = await this.getAuthToken();
     logger.info(`Deleting booking ID: ${bookingId}`);
@@ -178,6 +235,18 @@ export default class BookingAPIBase {
     };
   }
 
+  /**
+   * Validates that a booking object contains all required fields.
+   * @param {Object} booking - Booking object to validate.
+   * @param {string} booking.firstname - First name.
+   * @param {string} booking.lastname - Last name.
+   * @param {number} booking.totalprice - Total price.
+   * @param {boolean} booking.depositpaid - Deposit paid flag.
+   * @param {Object} booking.bookingdates - Booking dates.
+   * @param {string} booking.bookingdates.checkin - Check-in date.
+   * @param {string} booking.bookingdates.checkout - Check-out date.
+   * @returns {Promise<{isValid: boolean, missingFields: Array, data: Object}>} Validation result.
+   */
   async validateBookingResponse(booking) {
     logger.info('Validating booking response');
     expect(booking, 'Booking object should not be null').to.not.be.null;

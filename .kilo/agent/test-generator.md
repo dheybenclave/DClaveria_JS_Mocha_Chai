@@ -43,8 +43,8 @@ async performNewAction(value) {
 
 ### 3. Create Spec File
 ```javascript
-import NewPage from '../../../src/pages/web/<app>/new.page.js';
-import logger from '../../../src/utils/logger.js';
+import NewPage from '../../src/pageobjects/<app>.page.js';
+import logger from '../../src/utils/logger.js';
 
 describe('@smoke @e2e_1 <Feature Name>', () => {
   let newPage;
@@ -83,7 +83,7 @@ describe('@smoke @e2e_1 <Feature Name>', () => {
 
 ### 5. Verify Discovery
 ```bash
-npx wdio run ./wdio.conf.js --suite regression --dry-run
+npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run
 ```
 
 ### 6. Run the New Test

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import BookingAPIBase from '../../../src/pages/api/restful-booker/booking.api.js';
-import { DataManager } from '../../../src/utils/data.manager.js';
-import { logger } from '../../../src/utils/logger.js';
+import BookingAPIBase from '../../pageobjects/booking.api.js';
+import { DataManager } from '../../utils/data.manager.js';
+import { logger } from '../../utils/logger.js';
 
 describe('@api @api_e2e_1 Restful Booker API Automation', () => {
   let bookingAPI;

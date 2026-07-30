@@ -4,24 +4,24 @@
   "description": "Web and API Automation Framework using WebDriverIO, Mocha, and Chai",
   "type": "module",
   "scripts": {
-    "test": "wdio run ./wdio.conf.js --openMochawesomeReport=true --maxInstances=10",
-    "test:parallel": "wdio run ./wdio.conf.js --openMochawesomeReport=true --maxInstances=5",
-    "test:chrome": "wdio run ./wdio.conf.js --capabilities.chrome",
-    "test:firefox": "wdio run ./wdio.conf.js --capabilities.firefox",
-    "test:api": "wdio run ./wdio.conf.js --specs ./tests/api/**/*.spec.js --openMochawesomeReport=true --maxInstances=5",
-    "test:web": "wdio run ./wdio.conf.js --specs ./tests/web/**/*.spec.js --openMochawesomeReport=true --maxInstances=5",
-    "test:tag": "wdio run ./wdio.conf.js --suite regression --openMochawesomeReport=true --maxInstances=5",
-    "test:tc1": "wdio run ./wdio.conf.js --suite regression --mochaOpts.grep='@tc_1' --openMochawesomeReport=true --maxInstances=5",
-    "test:web_e2e_1": "wdio run ./wdio.conf.js --suite regression --mochaOpts.grep='@web_e2e_1' --openMochawesomeReport=true --maxInstances=5",
-    "test:api_e2e_1": "wdio run ./wdio.conf.js --suite regression --mochaOpts.grep='@api_e2e_1' --openMochawesomeReport=true --maxInstances=5",
-    "wdio": "wdio run ./wdio.conf.js",
-    "collect": "npx wdio run ./wdio.conf.js --suite regression --dry-run",
+    "test": "wdio run ./config/wdio.local.conf.js --openMochawesomeReport=true --maxInstances=10",
+    "test:parallel": "wdio run ./config/wdio.local.conf.js --openMochawesomeReport=true --maxInstances=5",
+    "test:chrome": "wdio run ./config/wdio.local.conf.js --capabilities.chrome",
+    "test:firefox": "wdio run ./config/wdio.local.conf.js --capabilities.firefox",
+    "test:api": "wdio run ./config/wdio.local.conf.js --specs ./src/specs/api/**/*.spec.js --openMochawesomeReport=true --maxInstances=5",
+    "test:web": "wdio run ./config/wdio.local.conf.js --specs ./src/specs/web/**/*.spec.js --openMochawesomeReport=true --maxInstances=5",
+    "test:tag": "wdio run ./config/wdio.local.conf.js --suite regression --openMochawesomeReport=true --maxInstances=5",
+    "test:tc1": "wdio run ./config/wdio.local.conf.js --suite regression --mochaOpts.grep='@tc_1' --openMochawesomeReport=true --maxInstances=5",
+    "test:web_e2e_1": "wdio run ./config/wdio.local.conf.js --suite regression --mochaOpts.grep='@web_e2e_1' --openMochawesomeReport=true --maxInstances=5",
+    "test:api_e2e_1": "wdio run ./config/wdio.local.conf.js --suite regression --mochaOpts.grep='@api_e2e_1' --openMochawesomeReport=true --maxInstances=5",
+    "wdio": "wdio run ./config/wdio.local.conf.js",
+    "collect": "npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run",
     "report": "start ./reports/mochawesome.html",
     "pipeline": "npm run agentic:bootstrap && npm run collect && npm run test:tc1 && npm run test:tag -- --mochaOpts.grep=\"@e2e_1\" && npm run report && npm run lint",
     "agentic:bootstrap": "node .kilo/scripts/bootstrap.js",
     "agentic:heal": "node .kilo/scripts/heal.js",
     "agentic:generate": "node .kilo/scripts/generate.js",
-    "lint": "eslint src/ tests/ specs/ --ext .js",
+    "lint": "eslint src/ --ext .js",
     "generate-html": "marge ./reports/test-report.json --reportDir ./reports --reportFilename index.html"
   },
   "keywords": [
@@ -34,12 +34,15 @@
   "author": "DheoClaveria_Automation_Testing",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^26.1.2",
     "@wdio/cli": "^9.30.0",
+    "@wdio/globals": "^9.29.1",
     "@wdio/local-runner": "^9.30.0",
     "@wdio/mocha-framework": "^9.30.0",
     "@wdio/spec-reporter": "^9.29.1",
     "eslint": "^9.0.0",
     "eslint-plugin-wdio": "^9.0.0",
+    "expect-webdriverio": "^5.7.0",
     "mochawesome": "^7.1.4",
     "mochawesome-merge": "^5.1.1",
     "mochawesome-report-generator": "^6.3.2",
@@ -48,6 +51,7 @@
     "wdio-mochawesome-reporter": "^7.0.0"
   },
   "dependencies": {
-    "chai": "^5.0.0"
+    "chai": "^5.0.0",
+    "dotenv": "^16.6.1"
   }
 }

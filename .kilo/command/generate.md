@@ -23,6 +23,6 @@ npm run agentic:generate -- --requirement="user can search for flights"
 
 ## Output
 
-- New spec file in `tests/web/` or `tests/api/`
-- Updated page object in `src/pages/`
-- Test data in `test-data/`
+- New spec file in `src/specs/web/` or `src/specs/api/`
+- Updated page object in `src/pageobjects/`
+- Test data in `src/fixtures/`

@@ -1,9 +1,12 @@
-// utils/logger.js
 import pino from 'pino';
 import pretty from 'pino-pretty';
 
 let logBuffer = [];
 
+/**
+ * Extracts the calling function name from the current stack trace.
+ * @returns {string} Caller function name or 'unknown'.
+ */
 function getCallerFunctionName() {
     const stack = new Error().stack;
     if (!stack) return 'unknown';
@@ -48,6 +51,10 @@ const captureStream = {
   }
 };
 
+/**
+ * Pino logger instance configured for console and in-memory buffering.
+ * @type {import('pino').Logger}
+ */
 const logger = pino(
   { level: process.env.LOG_LEVEL || 'info' },
   pino.multistream([
@@ -56,14 +63,27 @@ const logger = pino(
   ])
 );
 
+/**
+ * Returns a shallow copy of the current in-memory log buffer.
+ * @returns {string[]} Array of formatted log strings.
+ */
 export function getLogBuffer() {
   return logBuffer.slice();
 }
 
+/**
+ * Clears the in-memory log buffer.
+ */
 export function clearLogBuffer() {
   logBuffer = [];
 }
 
+/**
+ * Creates a child logger bound to a specific test and suite.
+ * @param {string} testTitle - Title of the current test.
+ * @param {string} suiteTitle - Title of the current suite.
+ * @returns {import('pino').Logger} Child logger instance.
+ */
 export function getTestLogger(testTitle, suiteTitle) {
   return logger.child({ test: testTitle, suite: suiteTitle });
 }

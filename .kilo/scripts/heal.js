@@ -14,7 +14,7 @@ console.log(`🔧 Self-Heal Test: ${testMatch}\n`);
 
 try {
     console.log('📋 Analyzing test failure...');
-    execSync(`npx wdio run ./wdio.conf.js --suite regression --mochaOpts.grep="${testMatch}"`, {
+    execSync(`npx wdio run ./config/wdio.local.conf.js --suite regression --mochaOpts.grep="${testMatch}"`, {
         shell: true,
         stdio: 'inherit'
     });

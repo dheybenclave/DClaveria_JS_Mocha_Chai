@@ -1,11 +1,15 @@
-// wdio.conf.js
-import { execSync } from 'child_process';
 import fs from 'fs';
 import { createRequire } from 'module';
 import path from 'path';
-import { clearLogBuffer, getLogBuffer, getTestLogger } from './src/utils/logger.js';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+import { clearLogBuffer, getLogBuffer, getTestLogger } from '../src/utils/logger.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
+
+dotenv.config();
 
 // Fix for upstream wdio-mochawesome-reporter bug: nested describe blocks
 // get pushed twice into the suite tree (see onSuiteEnd in their source —
@@ -21,27 +25,23 @@ function dedupeSuites(suite) {
     suite.suites.forEach(dedupeSuites);
 }
 
-const config = {
-    runner: 'local',
-    headless: false,
-    openMochawesomeReport: false,
-
+const baseConfig = {
+    baseUrl: process.env.BASE_URL || 'https://www.cheapflights.com.au',
+    apiBaseUrl: process.env.API_BASE_URL || 'https://restful-booker.herokuapp.com',
+    browser: process.env.BROWSER || 'chrome',
+    timeout: Number(process.env.TIMEOUT || 60000),
+    apiUsername: process.env.API_USERNAME || 'admin',
+    apiPassword: process.env.API_PASSWORD || 'password123',
+    openMochawesomeReport: process.env.OPEN_MOCHAWESOME_REPORT === 'true',
+    headless: process.env.HEADLESS === 'true',
     specs: [
-        './tests/web/**/*.spec.js',
-        './tests/api/**/*.spec.js'
+        path.resolve(__dirname, '../src/specs/web/**/*.spec.js'),
+        path.resolve(__dirname, '../src/specs/api/**/*.spec.js')
     ],
     exclude: [],
     suites: {
-        regression: ['./tests/web/cheapflights/cheapflights.spec.js'],
-        api: ['./tests/api/booking/booking.spec.js']
-    },
-    logLevel: 'warn',
-    logLevels: {
-        webdriver: 'error',
-        webdriverio: 'error',
-        '@wdio/cli': 'warn',
-        '@wdio/runner': 'warn',
-        '@wdio/mocha-framework': 'warn'
+        regression: [path.resolve(__dirname, '../src/specs/web/cheapflights.spec.js')],
+        api: [path.resolve(__dirname, '../src/specs/api/booking.spec.js')]
     },
     framework: 'mocha',
     mochaOpts: {
@@ -66,7 +66,7 @@ const config = {
         [
             'mochawesome',
             {
-                outputDir: './reports',
+                outputDir: path.resolve(__dirname, '../reports'),
                 includeScreenshots: true,
                 screenshotUseRelativePath: true,
                 outputFileFormat: function (opts) {
@@ -76,7 +76,7 @@ const config = {
         ]
     ],
     onPrepare: function (config, capabilities) {
-        const reportDirectory = './reports';
+        const reportDirectory = path.resolve(__dirname, '../reports');
         if (fs.existsSync(reportDirectory)) {
             console.log('Cleaning historical records from: ' + reportDirectory);
             fs.rmSync(reportDirectory, { recursive: true, force: true });
@@ -104,17 +104,15 @@ const config = {
         console.log('Generating Mochawesome reports...');
 
         try {
-            const reportsDir = './reports';
+            const reportsDir = path.resolve(__dirname, '../reports');
             if (!fs.existsSync(reportsDir)) {
                 console.log('Reports directory does not exist.');
                 return;
             }
 
-            // Read raw output directory files
             const files = fs.readdirSync(reportsDir);
             console.log('Raw files in directory:', files);
 
-            // Filter for the dynamic json result objects
             const jsonFiles = files.filter(f => f.endsWith('.json') && f !== 'wdio-ma-merged.json');
             console.log('JSON data files found:', jsonFiles);
 
@@ -124,13 +122,11 @@ const config = {
                     const { merge } = require('mochawesome-merge');
 
                     console.log('Merging JSON test reports...');
-                    // Merge all separate worker fragments into one main schema object
                     const jsonGlob = path.join(reportsDir, '*.json').split(path.sep).join('/');
                     const mergedJson = await merge({
                         files: [jsonGlob],
                     });
 
-                    // Fix upstream duplicate-suite bug before generating the HTML
                     if (mergedJson.results) {
                         mergedJson.results.forEach(dedupeSuites);
                     }
@@ -155,7 +151,6 @@ const config = {
                 console.log('No raw JSON files found for report generation.');
             }
 
-            // Auto open the compiled view in your machine's browser
             if (config.openMochawesomeReport) {
                 try {
                     const updatedFiles = fs.readdirSync(reportsDir);
@@ -165,7 +160,7 @@ const config = {
                         console.log(`Opening report: ${reportPath}`);
 
                         const startCmd = process.platform === 'win32' ? 'start ""' : process.platform === 'darwin' ? 'open' : 'xdg-open';
-                        execSync(`${startCmd} "${reportPath}"`, { stdio: 'ignore' });
+                        require('child_process').execSync(`${startCmd} "${reportPath}"`, { stdio: 'ignore' });
                     } else {
                         console.log('No HTML report found to open.');
                     }
@@ -181,4 +176,5 @@ const config = {
     }
 };
 
-export { config };
+export const config = baseConfig;
+export { dedupeSuites };

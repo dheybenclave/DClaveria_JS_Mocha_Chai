@@ -14,9 +14,9 @@ When implementing or fixing behavior:
 
 ## Test Types Expected
 
-- WebDriverIO specs under `tests/web/`
-- API specs under `tests/api/`
-- Page object driven assertions under `src/pages/`
+- WebDriverIO specs under `src/specs/web/`
+- API specs under `src/specs/api/`
+- Page object driven assertions under `src/pageobjects/`
 
 ## Stability Rules
 
@@ -30,7 +30,7 @@ When implementing or fixing behavior:
 - [ ] Scenario(s) for the change pass
 - [ ] WDIO dry-run passes
 - [ ] No new flaky waits or timing hacks
-- [ ] Report artifacts remain generated in `mochawesome-report/`
+- [ ] Report artifacts remain generated in `reports/`
 - [ ] All steps logged with `logger.step()`
 
 ## QA Engineers

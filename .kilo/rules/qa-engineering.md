@@ -20,10 +20,10 @@ This guide defines the standard operating procedures for QA engineers using the 
 ### Key Paths
 | Path | Purpose |
 |------|---------|
-| `tests/web/**/*.spec.js` | UI E2E test specs |
-| `tests/api/**/*.spec.js` | API test specs |
-| `src/pages/web/` | Web page objects |
-| `src/pages/api/` | API page objects |
+| `src/specs/web/**/*.spec.js` | UI E2E test specs |
+| `src/specs/api/**/*.spec.js` | API test specs |
+| `src/pageobjects/` | Web page objects |
+| `src/pageobjects/` | API page objects |
 | `src/utils/` | Config, logger, data manager |
 | `./reports/` | Mochawesome HTML reports |
 | `AGENTIC_GUIDE.md` | Single unified agentic AI document |
@@ -63,7 +63,7 @@ npm run test:web
 npm run test:api
 
 # Dry-run to check discovery
-npx wdio run ./wdio.conf.js --suite regression --dry-run
+npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run
 ```
 
 ### Writing a Test Spec

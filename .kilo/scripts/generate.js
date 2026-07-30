@@ -13,9 +13,9 @@ const requirement = args.find(a => a.startsWith('--requirement='))?.replace('--r
 console.log(`🎯 Generate Test from Requirement: "${requirement}"\n`);
 
 const specTemplate = `import { expect } from 'chai';
-import HomePage from '../../../src/pages/web/cheapflights/home.page.js';
-import FlightSearchPage from '../../../src/pages/web/cheapflights/search.page.js';
-import logger from '../../../src/utils/logger.js'; 
+import HomePage from '../../src/pageobjects/home.page.js';
+import FlightSearchPage from '../../src/pageobjects/search.page.js';
+import logger from '../../src/utils/logger.js'; 
 
 describe('Generated Test: ${requirement}', () => {
     let homePage;
@@ -40,7 +40,7 @@ describe('Generated Test: ${requirement}', () => {
 });
 `;
 
-const outputPath = path.resolve(process.cwd(), 'tests/web/generated/generated.spec.js');
+const outputPath = path.resolve(process.cwd(), 'src/specs/web/generated/generated.spec.js');
 
 try {
     execSync(`mkdir -p "${path.dirname(outputPath)}"`, { shell: true });
@@ -50,7 +50,7 @@ try {
     console.log('   1. Review and update the placeholder test');
     console.log('   2. Add proper @tc_N tag');
     console.log('   3. Implement test steps in page objects');
-    console.log('   4. Run collection: npx wdio run ./wdio.conf.js --dry-run');
+    console.log('   4. Run collection: npx wdio run ./config/wdio.local.conf.js --dry-run');
 } catch (error) {
     console.error('❌ Failed to generate test:', error.message);
     process.exit(1);

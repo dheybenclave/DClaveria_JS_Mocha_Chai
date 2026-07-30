@@ -1,12 +1,11 @@
-import HomePage from '../../../src/pages/web/cheapflights/home.page.js';
-import LoginPage from '../../../src/pages/web/cheapflights/login.page.js';
-import FlightSearchPage from '../../../src/pages/web/cheapflights/search.page.js';
-import logger from '../../../src/utils/logger.js';
+import HomePage from '../../pageobjects/home.page.js';
+import LoginPage from '../../pageobjects/login.page.js';
+import FlightSearchPage from '../../pageobjects/search.page.js';
+import logger from '../../utils/logger.js';
 
 
 describe('@smoke @e2e_1 Cheapflights DClaveria Web UI Automation', () => {
   let homePage;
-  let loginPage;
   let searchPage;
 
   before(() => {

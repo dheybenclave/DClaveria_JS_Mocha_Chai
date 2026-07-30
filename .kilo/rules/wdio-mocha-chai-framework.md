@@ -7,11 +7,11 @@ alwaysApply: true
 
 ## Key Paths
 
-- Specs: `tests/web/`, `tests/api/`
-- Pages: `src/pages/`
-- Config: `wdio.conf.js`
+- Specs: `src/specs/web/`, `src/specs/api/`
+- Pages: `src/pageobjects/`
+- Config: `config/wdio.shared.conf.js`
 - Utilities: `src/utils/`
-- Reports: `mochawesome-report/`
+- Reports: `reports/`
 
 ## Workflow
 
@@ -26,7 +26,7 @@ alwaysApply: true
 npm run test:tc1
 npm run test:tag -- --mochaOpts.grep="@tc_1"
 npm run report
-npx wdio run ./wdio.conf.js --suite regression --dry-run
+npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run
 ```
 
 ## Reliability Guardrails

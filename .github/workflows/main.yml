@@ -82,6 +82,8 @@ jobs:
       BASE_URL: https://www.cheapflights.com.au
       API_BASE_URL: https://restful-booker.herokuapp.com
       HEADLESS: "true"
+      API_USERNAME: ${{ secrets.API_USERNAME }}
+      API_PASSWORD: ${{ secrets.API_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -97,7 +99,7 @@ jobs:
         run: npm ci
 
       - name: Run WDIO tests
-        run: npx wdio run ./wdio.conf.js --suite regression ${{ needs.setup.outputs.test_args }} --config.openMochawesomeReport=${{ needs.setup.outputs.open_report }} --max-instances=${{ fromJSON(needs.setup.outputs.parallel && '5' || '1') }}
+        run: npx wdio run ./config/wdio.local.conf.js --suite regression ${{ needs.setup.outputs.test_args }} --config.openMochawesomeReport=${{ needs.setup.outputs.open_report }} --max-instances=${{ fromJSON(needs.setup.outputs.parallel && '5' || '1') }}
         shell: pwsh
 
       - name: Upload mochawesome report
@@ -133,7 +135,7 @@ jobs:
         run: npm ci
 
       - name: Run ESLint
-        run: npx eslint src/ tests/ --ext .js
+        run: npx eslint src/ --ext .js
 
   report:
     needs: [test, lint]

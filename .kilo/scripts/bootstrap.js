@@ -12,7 +12,7 @@ console.log('🚀 Agentic Bootstrap - Kilo QA Environment Validation\n');
 const checks = [
     { name: 'Node.js', cmd: 'node --version' },
     { name: 'WDIO CLI', cmd: 'npx wdio --version' },
-    { name: 'WDIO Config Load', cmd: 'node -e "import(\'./wdio.conf.js\').then(m => console.log(\'config loaded\')).catch(e => process.exit(1))"' },
+    { name: 'WDIO Config Load', cmd: 'node -e "import(\'./config/wdio.local.conf.js\').then(m => console.log(\'config loaded\')).catch(e => process.exit(1))"' },
     { name: 'Mochawesome Generate', cmd: 'node scripts/generate-report.js' }
 ];
 
