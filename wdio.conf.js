@@ -24,6 +24,7 @@ function dedupeSuites(suite) {
 const config = {
     runner: 'local',
     headless: false,
+    openMochawesomeReport: false,
 
     specs: [
         './tests/web/**/*.spec.js',

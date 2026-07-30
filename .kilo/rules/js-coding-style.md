@@ -48,3 +48,7 @@ import BasePage from '../base.page.js';
 import { logger } from '../../utils/logger.js';
 import { expect } from 'chai';
 ```
+
+## QA Engineers
+
+See `AGENTIC_GUIDE.md` for standard test writing patterns, page object conventions, and common workflows.

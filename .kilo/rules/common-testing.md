@@ -32,3 +32,7 @@ When implementing or fixing behavior:
 - [ ] No new flaky waits or timing hacks
 - [ ] Report artifacts remain generated in `mochawesome-report/`
 - [ ] All steps logged with `logger.step()`
+
+## QA Engineers
+
+See `AGENTIC_GUIDE.md` for framework usage standards, test writing patterns, and debugging procedures.

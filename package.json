@@ -15,7 +15,9 @@
     "test:web_e2e_1": "wdio run ./wdio.conf.js --suite regression --mochaOpts.grep='@web_e2e_1' --openMochawesomeReport=true --maxInstances=5",
     "test:api_e2e_1": "wdio run ./wdio.conf.js --suite regression --mochaOpts.grep='@api_e2e_1' --openMochawesomeReport=true --maxInstances=5",
     "wdio": "wdio run ./wdio.conf.js",
-    "report": "start mochawesome-report/report.html",
+    "collect": "npx wdio run ./wdio.conf.js --suite regression --dry-run",
+    "report": "start ./reports/mochawesome.html",
+    "pipeline": "npm run agentic:bootstrap && npm run collect && npm run test:tc1 && npm run test:tag -- --mochaOpts.grep=\"@e2e_1\" && npm run report && npm run lint",
     "agentic:bootstrap": "node .kilo/scripts/bootstrap.js",
     "agentic:heal": "node .kilo/scripts/heal.js",
     "agentic:generate": "node .kilo/scripts/generate.js",
@@ -46,7 +48,6 @@
     "wdio-mochawesome-reporter": "^7.0.0"
   },
   "dependencies": {
-    "chai": "^5.0.0",
-    "dotenv": "^16.4.5"
+    "chai": "^5.0.0"
   }
 }

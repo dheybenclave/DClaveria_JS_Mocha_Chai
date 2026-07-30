@@ -11,6 +11,7 @@ alwaysApply: true
 - **Selectors belong in page objects**: Never put CSS/XPath selectors directly in spec files
 - **No time.sleep()**: Use `waitForDisplayed`, `waitForEnabled`, `browser.waitUntil`
 - **Keep specs declarative**: Specs should be thin; delegate complex logic to page objects
+- **QA engineers**: See `AGENTIC_GUIDE.md` for framework usage standards and test writing patterns
 
 ## Selector Strategy
 

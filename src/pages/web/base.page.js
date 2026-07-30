@@ -1,8 +1,10 @@
 import { expect } from 'chai';
 import { CONFIG } from '../../utils/config.js';
-import logger from '../../utils/logger.js';
+import { logger } from '../../utils/logger.js';
 
 export default class BasePage {
+
+
 
 
   getSelectorName(elementOrSelector) {
@@ -64,19 +66,27 @@ export default class BasePage {
   }
 
   async waitForPageLoad() {
-    logger.info('Waiting for page load');
+    logger.info('Waiting for page load lifecycle to complete');
+
     await browser.waitUntil(
       async () => {
-        const state = await browser.getUrl();
-        return state.includes(CONFIG.BASE_URL);
+        // 1. Get current URL state
+        const currentUrl = await browser.getUrl();
+        const isCorrectDomain = currentUrl.includes(CONFIG.BASE_URL);
+
+        // 2. Query the browser to see if the HTML is fully parsed and loaded
+        const isDOMReady = await browser.execute(() => document.readyState === 'complete');
+
+        // Both must be true to proceed safely
+        return isCorrectDomain && isDOMReady;
       },
       {
         timeout: CONFIG.TIMEOUT,
-        timeoutMsg: `Page did not load within ${CONFIG.TIMEOUT}ms`
+        timeoutMsg: `Page failed to stabilize at ${CONFIG.BASE_URL} within ${CONFIG.TIMEOUT}ms`
       }
     );
-    expect(await browser.getUrl(), `Page should be loaded `).to.include(CONFIG.BASE_URL);
   }
+
 
   async waitForElementClickable(elementOrSelector, timeout = CONFIG.TIMEOUT) {
     logger.info(`Waiting for element to be clickable (timeout: ${timeout}ms) `);
