@@ -1,8 +1,8 @@
+import dotenv from 'dotenv';
 import fs from 'fs';
 import { createRequire } from 'module';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
 import { clearLogBuffer, getLogBuffer, getTestLogger } from '../src/utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,8 +30,8 @@ const baseConfig = {
     apiBaseUrl: process.env.API_BASE_URL || 'https://restful-booker.herokuapp.com',
     browser: process.env.BROWSER || 'chrome',
     timeout: Number(process.env.TIMEOUT || 60000),
-    apiUsername: process.env.API_USERNAME || 'admin',
-    apiPassword: process.env.API_PASSWORD || 'password123',
+    apiUsername: process.env.API_USERNAME,
+    apiPassword: process.env.API_PASSWORD,
     openMochawesomeReport: process.env.OPEN_MOCHAWESOME_REPORT === 'true',
     headless: process.env.HEADLESS === 'true',
     specs: [

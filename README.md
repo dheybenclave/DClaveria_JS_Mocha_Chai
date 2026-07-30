@@ -55,8 +55,8 @@ A scalable WebDriverIO + Mocha + Chai framework following the Page Object Model.
 Copy `.env.example` to `.env` and configure:
 
 ```env
-API_USERNAME=admin
-API_PASSWORD=password123
+API_USERNAME=
+API_PASSWORD=
 ```
 
 ## NPM Scripts
