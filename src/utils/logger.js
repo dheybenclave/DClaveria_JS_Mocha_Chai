@@ -85,7 +85,7 @@ export function clearLogBuffer() {
  * @returns {import('pino').Logger} Child logger instance.
  */
 export function getTestLogger(testTitle, suiteTitle) {
-  return logger.child({ test: testTitle, suite: suiteTitle });
+  return logger;
 }
 
 export default logger;

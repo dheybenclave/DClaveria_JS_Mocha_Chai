@@ -47,7 +47,7 @@ A scalable WebDriverIO + Mocha + Chai framework following the Page Object Model.
 1. Install dependencies: `npm install`
 2. Run local web tests: `npm run test:web`
 3. Run API tests: `npm run test:api`
-4. Run specific tag: `npm run test:tag -- --mochaOpts.grep="@tc_1"`
+4. Run specific tag: `npm run test:tag --tag=@tc_1`
 5. Generate report: `npm run report`
 
 ## Environment Variables
@@ -67,6 +67,6 @@ API_PASSWORD=
 | `npm run test:web` | Run web tests only |
 | `npm run test:api` | Run API tests only |
 | `npm run test:tag` | Run by tag/marker |
-| `npm run test:tc1` | Run TC_1 only |
+| `npm run test:tag --tag=@tc_1` | Run TC_1 only |
 | `npm run report` | Open Mochawesome HTML report |
 | `npm run lint` | Run ESLint |

@@ -33,14 +33,14 @@ npx wdio run ./wdio.conf.js --suite regression --dry-run
 
 ### 3. Run Targeted Tests
 ```bash
-npm run test:tc1
+npm run test:tag --tag="@tc_1"
 ```
 - Run `@tc_1` specifically for fast feedback
 - Verify the test passes
 
 ### 4. Run Full Regression
 ```bash
-npm run test:tag -- --mochaOpts.grep="@e2e_1"
+npm run test:tag --tag="@e2e_1"
 ```
 - Run all E2E regression tests
 - Verify no regressions introduced

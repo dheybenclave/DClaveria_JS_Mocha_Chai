@@ -25,8 +25,8 @@ describe('@api @api_e2e_1 Restful Booker API Automation', () => {
     }
   });
 
-  describe('@api CreateBooking API - Positive Tests', () => {
-    it('@api @api_tc_1 should create a new booking with valid data', async () => {
+  describe('CreateBooking API - Positive Tests', () => {
+    it('@api_tc_1 should create a new booking with valid data', async () => {
       logger.info('TC_API_1: Creating new booking with valid data');
       const validBooking = DataManager.getApiData('booking_test_data.json').valid_bookings[0];
 

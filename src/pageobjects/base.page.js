@@ -1,11 +1,8 @@
 import { expect } from 'chai';
+import { Key } from 'webdriverio';
 import { CONFIG } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
 
-/**
- * Base page object containing common UI actions and verification methods.
- * All page objects should extend this class.
- */
 export default class BasePage {
   /**
    * Returns a displayable name for an element or selector string.
@@ -93,21 +90,41 @@ export default class BasePage {
   }
 
   /**
+   * Waits for an integer number of seconds using browser pause.
+   * Prefer explicit waits over arbitrary sleeps; use only when absolutely necessary.
+   * @param {number} seconds - Number of seconds to wait.
+   */
+  async waitForIntSecond(seconds) {
+    logger.info(`Waiting for ${seconds} seconds`);
+    await browser.pause(seconds * 1000);
+  }
+
+  /**
    * Waits until the current page URL belongs to the configured base URL and the document is fully loaded.
    */
   async waitForPageLoad() {
-    logger.info('Waiting for page load lifecycle to complete');
+    logger.info('Waiting for page load lifecycle and loading elements to clear');
+
+    // Define the selectors or classes used by your application's loaders
+    const loaderSelector = '.loading-icon, .spinner, #global-loader';
 
     await browser.waitUntil(
       async () => {
         const currentUrl = await browser.getUrl();
         const isCorrectDomain = currentUrl.includes(CONFIG.BASE_URL);
         const isDOMReady = await browser.execute(() => document.readyState === 'complete');
-        return isCorrectDomain && isDOMReady;
+
+        // Find any active loading element on the page
+        const loader = await $(loaderSelector);
+
+        // Element must either not exist in the DOM, or explicitly not be visible to the user
+        const isLoaderGone = !(await loader.isDisplayed());
+
+        return isCorrectDomain && isDOMReady && isLoaderGone;
       },
       {
         timeout: CONFIG.TIMEOUT,
-        timeoutMsg: `Page failed to stabilize at ${CONFIG.BASE_URL} within ${CONFIG.TIMEOUT}ms`
+        timeoutMsg: `Page failed to stabilize or loading icons persisted at ${CONFIG.BASE_URL} within ${CONFIG.TIMEOUT}ms`
       }
     );
   }
@@ -140,6 +157,29 @@ export default class BasePage {
     await el.waitForDisplayed({ timeout });
     expect(await el.isExisting(), `Element should exist in DOM }`).to.be.true;
     expect(await el.isDisplayed(), `Element should be visible on viewport }`).to.be.true;
+  }
+
+  /**
+   * 
+   * @param {Promise<WebdriverIO.Element>} elementOrSelector 
+   */
+  async clickElementIfExist(elementOrSelector) {
+
+    let isExist = false;
+    const el = await this.getElement(elementOrSelector);
+    logger.info(`Clicking element if exist : ${this.getSelectorName(el)}`);
+
+    this.waitForIntSecond(2);
+    if (await el.isExisting() && el.isClickable()) {
+
+      await el.click();
+      isExist = true;
+    }
+    else {
+      logger.info(`Element : ${this.getSelectorName(el)} is NOT Exist`);
+      isExist = false;
+    }
+    return isExist
   }
 
   /**
@@ -180,13 +220,40 @@ export default class BasePage {
    */
   async enterText(elementOrSelector, value) {
     logger.info(`Entering text into element`);
-    const el = await this.getTextElement(elementOrSelector);
+    const el = await this.getElement(elementOrSelector);
 
     logger.info(`Entering text: ${value} into element: ${this.getSelectorName(el)}`);
+
     await this.waitForElementVisible(el, CONFIG.TIMEOUT);
+
+    await this.clearTextField(el);
+
     await el.setValue(value);
 
+    await this.waitForIntSecond(3);
+    await this.waitForPageLoad();
+
+    await browser.keys([Key.Enter]);
+
+    await this.waitForIntSecond(3);
+    await this.waitForPageLoad();
+
+
     return el;
+  }
+
+  async clearTextField(elementOrSelector) {
+    logger.info(`Clearing text into element`);
+    const el = await this.getElement(elementOrSelector);
+
+    logger.info(`Clear Text Element ${this.getSelectorName(el)}`);
+
+    await this.waitForElementVisible(el, CONFIG.TIMEOUT);
+
+    await el.clearValue();
+
+    await browser.keys([Key.Clear]);
+
   }
 
   /**
@@ -201,9 +268,24 @@ export default class BasePage {
 
     const actualText = await el.getText();
     expect(actualText, `Expected text to include "${expectedText}" : Element: ${this.getSelectorName(el)}`).to.include(expectedText);
-    logger.info(`Element text verified to contain: ${expectedText}`);
 
     return el;
+  }
+
+  /**
+   * 
+   * @param {Promise<WebdriverIO.Element} elementOrSelector 
+   * @param {String} value 
+   */
+  async getElementTextValue(elementOrSelector, expectedText) {
+    logger.info(`Verifying element contains text: ${expectedText}`);
+
+    const el = await this.getElement(elementOrSelector);
+    await this.waitForElementVisible(el, CONFIG.TIMEOUT);
+
+    let retText = await el.getText();
+    logger.info(`Verifying element contains text: ${expectedText} | Element : ${this.getSelectorName(el)}`);
+    return retText;
   }
 
   /**

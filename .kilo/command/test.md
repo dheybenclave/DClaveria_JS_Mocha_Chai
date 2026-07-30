@@ -10,8 +10,7 @@ Run WebDriverIO tests with proper reporting.
 ## Usage
 
 ```bash
-npm run test:tc1
-npm run test:tag -- --mochaOpts.grep="@tc_1"
+npm run test:tag --tag="@tc_1"
 npm run test:web
 npm run test:api
 ```

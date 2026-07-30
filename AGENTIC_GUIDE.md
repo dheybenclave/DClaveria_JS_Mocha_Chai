@@ -61,8 +61,8 @@ npm run test                    # Run all tests
 npm run test:parallel          # Run all tests in parallel
 npm run test:web               # Run only web tests
 npm run test:api               # Run only API tests
-npm run test:tag -- --mochaOpts.grep="@tc_1"  # Run specific tag
-npm run test:tc1               # Run @tc_1 specifically
+npm run test:tag --tag="@tc_1"  # Run specific tag
+npm run test:tag --tag="@tc_1"               # Run @tc_1 specifically
 npm run report                 # Generate and open HTML report
 npm run collect                # Verify test discovery (dry-run)
 npm run pipeline               # Run full CI/CD pipeline
@@ -367,7 +367,7 @@ npm run agentic:bootstrap
 npm run collect
 
 # 3. Run targeted test
-npm run test:tc1
+npm run test:tag --tag="@tc_1"
 
 # 4. Run full regression
 npm run test:tag -- --mochaOpts.grep="@e2e_1"
@@ -495,13 +495,13 @@ await apiPage.deleteBooking(bookingId);
 
 ```bash
 # Run single test
-npm run test:tc1
+npm run test:tag --tag="@tc_1"
 
 # Run with debug logging
-LOG_LEVEL=debug npm run test:tc1
+LOG_LEVEL=debug npm run test:tag --tag="@tc_1"
 
 # Run with visible browser (not headless)
-HEADLESS=false npm run test:tc1
+HEADLESS=false npm run test:tag --tag="@tc_1"
 ```
 
 ### Common Failure Patterns

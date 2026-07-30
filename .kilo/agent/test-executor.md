@@ -21,8 +21,7 @@ You are a Test Executor agent specialized in running, monitoring, and analyzing 
 
 ### 1. Targeted Run (Fast Feedback)
 ```bash
-npm run test:tc1
-npm run test:tag -- --mochaOpts.grep="@tc_1"
+npm run test:tag --tag="@tc_1"
 ```
 
 ### 2. Dry-Run (Discovery Check)
@@ -32,7 +31,7 @@ npx wdio run ./wdio.conf.js --suite regression --mochaOpts.grep="@tc_1" --dry-ru
 
 ### 3. Full Regression Run
 ```bash
-npm run test:tag -- --mochaOpts.grep="@e2e_1"
+npm run test:tag --tag="@e2e_1"
 ```
 
 ### 4. Generate and Open Report

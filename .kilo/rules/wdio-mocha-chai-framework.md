@@ -23,8 +23,7 @@ alwaysApply: true
 ## Command Quickstart
 
 ```bash
-npm run test:tc1
-npm run test:tag -- --mochaOpts.grep="@tc_1"
+npm run test:tag --tag="@tc_1"
 npm run report
 npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run
 ```

@@ -37,8 +37,8 @@ This document provides commands and code style guidelines for **all AI coding ag
 npm run test                    # Run all tests
 npm run test:web               # Run only web tests
 npm run test:api               # Run only API tests
-npm run test:tag -- --mochaOpts.grep="@tc_1"  # Run specific tag
-npm run test:tc1               # Run @tc_1 specifically
+npm run test:tag --tag="@tc_1"  # Run specific tag
+npm run test:tag --tag="@tc_1"               # Run @tc_1 specifically
 npm run report                 # Generate and open HTML report
 
 # === Verification ===

@@ -20,7 +20,7 @@ You are a Test Healer agent specialized in diagnosing and fixing broken test sel
 
 ### 1. Identify Failure
 ```bash
-npm run test:tc1
+npm run test:tag --tag="@tc_1"
 ```
 Read the error message and stack trace from the console output and mochawesome report.
 
@@ -44,12 +44,12 @@ Read the error message and stack trace from the console output and mochawesome r
 
 ### 4. Verify Fix
 ```bash
-npm run test:tc1
+npm run test:tag --tag="@tc_1"
 ```
 
 ### 5. Run Broader Regression
 ```bash
-npm run test:tag -- --mochaOpts.grep="@e2e_1"
+npm run test:tag --tag="@e2e_1"
 ```
 
 ## Guardrails

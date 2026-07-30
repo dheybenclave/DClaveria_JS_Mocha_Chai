@@ -1,15 +1,13 @@
 import HomePage from '../../pageobjects/home.page.js';
-import FlightSearchPage from '../../pageobjects/search.page.js';
+import { DataManager } from '../../utils/data.manager.js';
 import logger from '../../utils/logger.js';
 
 
 describe('@smoke @e2e_1 Cheapflights DClaveria Web UI Automation', () => {
   let homePage;
-  let searchPage;
 
   before(() => {
     homePage = new HomePage();
-    searchPage = new FlightSearchPage();
     logger.info('Test suite initialized');
   });
 
@@ -34,6 +32,7 @@ describe('@smoke @e2e_1 Cheapflights DClaveria Web UI Automation', () => {
       await homePage.clickCarButton();
       await homePage.verifyContainsText('Car hire.');
 
+
       await homePage.clickStayButton();
       await homePage.verifyContainsText('Where do you want to stay?');
 
@@ -44,45 +43,50 @@ describe('@smoke @e2e_1 Cheapflights DClaveria Web UI Automation', () => {
     });
   });
 
-  // describe('Flight Search - Positive Tests', () => {
-  //   it('@tc_6 should search for flights with valid parameters', async () => {
-  //     logger.info('TC_6: Searching flights with valid parameters');
+  describe('Validate and Verify Flight Seeach Functionalities', () => {
+    it('@tc_2 @web_tc_2 Search Valid FLight Details', async () => {
+      logger.info('TC_2: Searching flights with valid parameters');
 
-  //     const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
+      const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
 
-  //     // Navigate to flights search page first
-  //     await homePage.clickFlightsButton();
-  //     await searchPage.waitForPageLoad();
-  //     await homePage.isOnHomePage();
+      // Navigate to flights search page first
+      await homePage.clickFlightsButton();
+      await homePage.waitForPageLoad();
 
-  //     await searchPage.searchFlights(
-  //       flightData.from,
-  //       flightData.to,
-  //       flightData.departure_date,
-  //       flightData.return_date,
-  //       flightData.adults
-  //     );
+      await homePage.searchFlights(
+        flightData.from,
+        flightData.to,
+        flightData.departure_date,
+        flightData.return_date,
+        flightData.adults
+      );
 
-  //     const hasResults = await searchPage.hasSearchResults();
-  //     expect(hasResults).to.be.true;
-  //   });
+      const hasResults = await homePage.hasSearchResults(
+        flightData.from,
+        flightData.to,
+        flightData.departure_date,
+        flightData.return_date,
+      );
+      expect(hasResults).to.be.true;
 
-  //   // it('@tc_7 should display search results with valid flight options', async () => {
-  //   //   logger.info('TC_7: Validating search results display');
-  //   //   const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
+    });
 
-  //   //   await searchPage.searchFlights(
-  //   //     flightData.from,
-  //   //     flightData.to,
-  //   //     flightData.departure_date,
-  //   //     flightData.return_date
-  //   //   );
+    // it('@tc_7 should display search results with valid flight options', async () => {
+    //   logger.info('TC_7: Validating search results display');
+    //   const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[0];
 
-  //   //   const results = await searchPage.getSearchResults();
-  //   //   expect(results).to.have.length.greaterThan(0);
-  //   //   logger.info('TC_7: Search results validation passed');
-  //   // });
+    //   await searchPage.searchFlights(
+    //     flightData.from,
+    //     flightData.to,
+    //     flightData.departure_date,
+    //     flightData.return_date
+    //   );
+
+    //   const results = await searchPage.getSearchResults();
+    //   expect(results).to.have.length.greaterThan(0);
+    //   logger.info('TC_7: Search results validation passed');
+    // });
 
 
-  // });
+  });
 });

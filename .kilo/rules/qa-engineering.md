@@ -51,10 +51,10 @@ This guide defines the standard operating procedures for QA engineers using the 
 
 ```bash
 # Run a specific test case
-npm run test:tc1
+npm run test:tag --tag="@tc_1"
 
 # Run by tag
-npm run test:tag -- --mochaOpts.grep="@tc_1"
+npm run test:tag --tag="@tc_1"
 
 # Run web tests only
 npm run test:web

@@ -1,34 +1,39 @@
 {
-  "compilerOptions": {
-    "module": "esnext",
-    "target": "es2022",
-    "moduleResolution": "node",
-    "checkJs": false,
-    "baseUrl": ".",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "types": [
-      "node",
-      "mocha",
-      "@wdio/globals/types",
-      "@wdio/mocha-framework"
-    ],
-    "paths": {
-      "@/*": ["src/*"]
-    }
-  },
-  "include": [
-    "src/**/*.js",
-    "tests/**/*.js",
-    "config/**/*.js",
-    "wdio.conf.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "reports",
-    "logs",
-    ".kilo",
-  ]
+  // "compilerOptions": {
+  //   "module": "esnext",
+  //   "target": "es2022",
+  //   "moduleResolution": "node",
+  //   "checkJs": false,
+  //   "baseUrl": ".",
+  //   "allowSyntheticDefaultImports": true,
+  //   "esModuleInterop": true,
+  //   "resolveJsonModule": true,
+  //   "skipLibCheck": true,
+  //   "types": [
+  //     "node",
+  //     "mocha",
+  //     "@wdio/globals/types",
+  //     "@wdio/mocha-framework"
+  //   ],
+  //   "paths": {
+  //     "@/*": ["src/*"],
+  //     "@utils/*": ["src/utils/*"],
+  //     "@pages/*": ["src/pageobjects/*"],
+  //     "@specs/*": ["src/specs/*"],
+  //     "@fixtures/*": ["src/fixtures/*"],
+  //     "@components/*": ["src/components/*"]
+  //   }
+  // },
+  // "include": [
+  //   "src/**/*.js",
+  //   "tests/**/*.js",
+  //   "config/**/*.js",
+  //   "wdio.conf.js"
+  // ],
+  // "exclude": [
+  //   "node_modules",
+  //   "reports",
+  //   "logs",
+  //   ".kilo",
+  // ]
 }

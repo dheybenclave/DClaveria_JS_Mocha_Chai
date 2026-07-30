@@ -1,10 +1,10 @@
 {
   "valid_flights": [
     {
-      "from": "Sydney",
-      "to": "Melbourne",
-      "departure_date": "2025-09-01",
-      "return_date": "2025-09-10",
+      "from": "Boracay, Philippines (MPH)",
+      "to": "Kalibo, Philippines (KLO)",
+      "departure_date": "2026-10-04",
+      "return_date": "2026-12-10",
       "adults": 1
     },
     {

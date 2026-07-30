@@ -88,7 +88,7 @@ npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run
 
 ### 6. Run the New Test
 ```bash
-npm run test:tc1
+npm run test:tag --tag="@tc_1"
 ```
 
 ## Guardrails
