@@ -7,65 +7,37 @@ import BasePage from './base.page.js';
  * Provides locators and actions for top-level navigation and page validation.
  */
 export default class HomePage extends BasePage {
-  /**
-   * Site logo image/container.
-   * @type {WebdriverIO.Element}
-   */
+ 
   get logoImage() {
     return $('div.mc6t-logo');
   }
 
-  /**
-   * Login button/link in the header.
-   * @type {WebdriverIO.Element}
-   */
   get loginButton() {
     return $('a[href*="login"]');
   }
 
-  /**
-   * Global search button.
-   * @type {WebdriverIO.Element}
-   */
   get searchButton() {
     return $('button[aria-label="Search"]');
   }
-  /**
-   * Car hire navigation button.
-   * @type {WebdriverIO.Element}
-   */
+
   get carButton() {
     return $('a[aria-label="Search for cars"]');
   }
 
-  /**
-   * Stays navigation button.
-   * @type {WebdriverIO.Element}
-   */
+
   get stayButton() {
     return $('a[aria-label="Search for stays"]');
   }
 
-  /**
-   * Flights navigation button.
-   * @type {WebdriverIO.Element}
-   */
+
   get flightsButton() {
     return $('a[aria-label="Search for flights"]');
   }
 
-  /**
-   * Sign in button in the header.
-   * @type {WebdriverIO.Element}
-   */
   get signButton() {
     return $('div[aria-label="Sign in"][role="button"]');
   }
 
-  /**
-   * Login dialog/modal container.
-   * @type {WebdriverIO.Element}
-   */
   get loginDialog() {
     return $('div[role="dialog"] div[class*="unified-login"]');
   }

@@ -1,4 +1,4 @@
-name: WDIO Tests
+name: Regression API Tests
 
 on:
   push:
@@ -7,23 +7,20 @@ on:
     branches: [ master, main ]
   workflow_dispatch:
     inputs:
-      test_tag:
-        description: 'Run specific test tag (e.g., @tc_1, @web_tc_1, @api_tc_1, @e2e_1, @api_e2e_1)'
-        required: true
-        default: '@tc_1'
-      run_parallel:
-        description: 'Run tests in parallel (max 5 instances)?'
-        required: true
-        type: boolean
-        default: false
       headless:
         description: 'Run in headless mode?'
         required: true
         type: boolean
         default: true
+      max_instances:
+        description: 'Max parallel instances'
+        required: true
+        type: string
+        default: '5'
 
 jobs:
-  test:
+  api:
+    name: API Regression
     runs-on: windows-latest
     env:
       BASE_URL: https://www.cheapflights.com.au
@@ -43,15 +40,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run WDIO tests
-        run: npx wdio run ./config/wdio.local.conf.js --specs "./src/specs/web/**/*.spec.js" --specs "./src/specs/api/**/*.spec.js" --mochaOpts.grep="${{ github.event.inputs.test_tag }}" --max-instances=${{ fromJSON(github.event.inputs.run_parallel && '5' || '1') }}
+      - name: Run API suite
+        run: npx wdio run ./config/wdio.ci.conf.js --suite api --max-instances=${{ github.event.inputs.max_instances || '5' }}
         shell: pwsh
 
       - name: Upload mochawesome report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mochawesome-report-tag-${{ github.event.inputs.test_tag }}
+          name: mochawesome-report-api
           path: reports/
           retention-days: 30
 
@@ -59,6 +56,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: screenshots-tag-${{ github.event.inputs.test_tag }}
+          name: screenshots-api
           path: logs/screenshots/
           retention-days: 7

@@ -1,5 +1,4 @@
 import HomePage from '../../pageobjects/home.page.js';
-import LoginPage from '../../pageobjects/login.page.js';
 import FlightSearchPage from '../../pageobjects/search.page.js';
 import logger from '../../utils/logger.js';
 
@@ -10,7 +9,6 @@ describe('@smoke @e2e_1 Cheapflights DClaveria Web UI Automation', () => {
 
   before(() => {
     homePage = new HomePage();
-    loginPage = new LoginPage();
     searchPage = new FlightSearchPage();
     logger.info('Test suite initialized');
   });
@@ -26,8 +24,8 @@ describe('@smoke @e2e_1 Cheapflights DClaveria Web UI Automation', () => {
   });
 
   describe('Validate and Verify Elements Home Page', () => {
-    it('@tc_1 Should Validate and Verify the Logo and Login Elements are Displayed on Home Page', async () => {
-      logger.info('TC_1: Validating and Verifying logo and login elements on home page');
+    it('@tc_1 @web_tc_1 Should Check Logo and Login Elements are Displayed on Home Page', async () => {
+      logger.info('TC_1: logo and login elements on home page');
 
       await homePage.waitForPageLoad();
 

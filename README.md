@@ -18,7 +18,6 @@ A scalable WebDriverIO + Mocha + Chai framework following the Page Object Model.
 │   ├── pageobjects/               # UI Selectors and raw atomic actions
 │   │   ├── base.page.js           # Houses custom wrapped utilities (waitForElementVisible)
 │   │   ├── home.page.js
-│   │   ├── login.page.js
 │   │   ├── search.page.js
 │   │   └── booking.api.js
 │   ├── specs/                     # Mocha test suites (Contains ONLY it() blocks and assertions)

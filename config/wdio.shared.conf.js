@@ -40,8 +40,12 @@ const baseConfig = {
     ],
     exclude: [],
     suites: {
-        regression: [path.resolve(__dirname, '../src/specs/web/cheapflights.spec.js')],
-        api: [path.resolve(__dirname, '../src/specs/api/booking.spec.js')]
+        regression: [
+            path.resolve(__dirname, '../src/specs/web/**/*.spec.js'),
+            path.resolve(__dirname, '../src/specs/api/**/*.spec.js')
+        ],
+        web: [path.resolve(__dirname, '../src/specs/web/**/*.spec.js')],
+        api: [path.resolve(__dirname, '../src/specs/api/**/*.spec.js')]
     },
     framework: 'mocha',
     mochaOpts: {

@@ -3,7 +3,7 @@
     "module": "esnext",
     "target": "es2022",
     "moduleResolution": "node",
-    "checkJs": true,
+    "checkJs": false,
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -11,6 +11,7 @@
     "skipLibCheck": true,
     "types": [
       "node",
+      "mocha",
       "@wdio/globals/types",
       "@wdio/mocha-framework"
     ],
@@ -20,13 +21,14 @@
   },
   "include": [
     "src/**/*.js",
+    "tests/**/*.js",
     "config/**/*.js",
-    ".kilo/**/*.js"
+    "wdio.conf.js"
   ],
   "exclude": [
     "node_modules",
     "reports",
     "logs",
-    ".kilo"
+    ".kilo",
   ]
 }

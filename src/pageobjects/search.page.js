@@ -7,66 +7,35 @@ import BasePage from './base.page.js';
  * Provides locators and actions for searching flights and reading results.
  */
 export default class FlightSearchPage extends BasePage {
-  /**
-   * From city input field.
-   * @type {WebdriverIO.Element}
-   */
+
   get fromCityInput() {
     return $('[data-testid="from-input"], input[placeholder*="From"], input[name="from"]');
   }
 
-  /**
-   * To city input field.
-   * @type {WebdriverIO.Element}
-   */
   get toCityInput() {
     return $('[data-testid="to-input"], input[placeholder*="To"], input[name="to"]');
   }
 
-  /**
-   * Departure date input field.
-   * @type {WebdriverIO.Element}
-   */
   get departureDateInput() {
     return $('[data-testid="departure-date"], input[placeholder*="Departure"], input[name="departure"]');
   }
 
-  /**
-   * Return date input field.
-   * @type {WebdriverIO.Element}
-   */
   get returnDateInput() {
     return $('[data-testid="return-date"], input[placeholder*="Return"], input[name="return"]');
   }
 
-  /**
-   * Search button.
-   * @type {WebdriverIO.Element}
-   */
   get searchButton() {
     return $('[data-testid="search-button"], button[type="submit"], .search-button');
   }
 
-  /**
-   * Search results container.
-   * @type {WebdriverIO.Element}
-   */
   get searchResultsContainer() {
     return $('[data-testid="results-container"], .results, .search-results');
   }
 
-  /**
-   * First search result item.
-   * @type {WebdriverIO.Element}
-   */
   get firstSearchResult() {
     return $('[data-testid="flight-result"]:first-child, .flight-result:first-child');
   }
 
-  /**
-   * Loading indicator/spinner.
-   * @type {WebdriverIO.Element}
-   */
   get loader() {
     return $('.loading, .spinner, [data-testid="loading"]');
   }
@@ -93,15 +62,15 @@ export default class FlightSearchPage extends BasePage {
     await this.waitForElementClickable(this.returnDateInput, 30000);
     await this.returnDateInput.setValue(returnDate);
     expect(await this.returnDateInput.getValue(), `Return date should be set: ${returnDate}`).to.equal(returnDate);
-    
+
     for (let i = 1; i < adults; i++) {
-        const adultSelector = $('[data-testid="adult-plus"], .adult-selector .plus');
-        if (await adultSelector.isDisplayed()) {
-            logger.info(`Increasing adult count: ${i + 1}`);
-            await adultSelector.click();
-        }
+      const adultSelector = $('[data-testid="adult-plus"], .adult-selector .plus');
+      if (await adultSelector.isDisplayed()) {
+        logger.info(`Increasing adult count: ${i + 1}`);
+        await adultSelector.click();
+      }
     }
-    
+
     logger.info('Clicking search button');
     await this.waitForElementClickable(this.searchButton, 30000);
     await this.searchButton.click();
@@ -138,19 +107,19 @@ export default class FlightSearchPage extends BasePage {
     const results = await $$('[data-testid="flight-result"], .flight-result');
     expect(results.length, 'Should have search results').to.be.greaterThan(0);
     const resultsData = [];
-    
+
     for (const result of results) {
       const price = await result.$('.price, [data-testid="price"]').getText();
       const airline = await result.$('.airline, [data-testid="airline"]').getText();
       const duration = await result.$('.duration, [data-testid="duration"]').getText();
-      
+
       resultsData.push({
         price: price ? price.trim() : null,
         airline: airline ? airline.trim() : null,
         duration: duration ? duration.trim() : null
       });
     }
-    
+
     logger.pass(`Found ${results.length} search results`);
     return resultsData;
   }

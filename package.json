@@ -21,7 +21,6 @@
     "agentic:bootstrap": "node .kilo/scripts/bootstrap.js",
     "agentic:heal": "node .kilo/scripts/heal.js",
     "agentic:generate": "node .kilo/scripts/generate.js",
-    "lint": "eslint src/ --ext .js",
     "generate-html": "marge ./reports/test-report.json --reportDir ./reports --reportFilename index.html"
   },
   "keywords": [
@@ -34,6 +33,7 @@
   "author": "DheoClaveria_Automation_Testing",
   "license": "ISC",
   "devDependencies": {
+    "@types/mocha": "^10.0.10",
     "@types/node": "^26.1.2",
     "@wdio/cli": "^9.30.0",
     "@wdio/globals": "^9.29.1",
