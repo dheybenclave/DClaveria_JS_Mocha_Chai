@@ -44,7 +44,7 @@ jobs:
         run: npm ci
 
       - name: Run WDIO tests
-        run: npx wdio run ./config/wdio.local.conf.js --specs "./src/specs/web/**/*.spec.js" --specs "./src/specs/api/**/*.spec.js" --mochaOpts.grep="${{ github.event.inputs.test_tag }}" --max-instances=${{ fromJSON(github.event.inputs.run_parallel && '5' || '1') }}
+        run: npx wdio run ./config/wdio.ci.conf.js --specs "${{ github.workspace }}/src/specs/web/**/*.spec.js" --specs "${{ github.workspace }}/src/specs/api/**/*.spec.js" --mochaOpts.grep="${{ github.event.inputs.test_tag }}" --max-instances=${{ fromJSON(github.event.inputs.run_parallel && '5' || '1') }}
         shell: pwsh
 
       - name: Upload mochawesome report
