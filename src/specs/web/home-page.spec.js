@@ -29,9 +29,11 @@ describe('@smoke @home_page Validate and Verify Elements Home Page', () => {
     await commonComponent.isLogoDisplayed();
 
     await homePage.clickCarButton();
+    await homePage.waitForLoadingToFinish();
     await homePage.verifyContainsText('Car hire.');
 
     await homePage.clickStayButton();
+    await homePage.waitForLoadingToFinish();
     await homePage.verifyContainsText('Where do you want to stay?');
 
     await homePage.clickElement(homePage.signButton);
