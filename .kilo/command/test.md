@@ -14,6 +14,8 @@ npm run test:tag --tag="@tc_1"
 npm run test:web
 npm run test:api
 npm run test:parallel
+npm run test:ci          # CI/CD: headless via wdio.ci.conf.js
+HEADLESS=true npm run test:tag --tag="@tc_1"  # Local headless
 ```
 
 ## Options

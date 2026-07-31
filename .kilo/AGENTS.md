@@ -50,6 +50,7 @@ npm run test:web:tag           # Run web specs filtered by tag
 npm run test:api:tag           # Run API specs filtered by tag
 npm run wdio                   # Direct WDIO run
 npm run collect                # Verify test discovery (dry-run)
+npm run test:ci                # CI/CD: headless run via wdio.ci.conf.js
 npm run report                 # Generate and open HTML report
 npm run pipeline               # Run full CI/CD pipeline
 

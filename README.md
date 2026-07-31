@@ -62,9 +62,9 @@ API_BASE_URL=https://restful-booker.herokuapp.com
 BROWSER=chrome
 TIMEOUT=60000
 HEADLESS=false
-OPEN_MOCHAWESOME_REPORT=false
-API_USERNAME=admin
-API_PASSWORD=password123
+OPEN_MOCHAWESOME_REPORT=true
+API_USERNAME=
+API_PASSWORD=
 ```
 
 ## NPM Scripts

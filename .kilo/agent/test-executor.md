@@ -11,9 +11,10 @@ You are a Test Executor agent specialized in running, monitoring, and analyzing 
 ## Project Context
 
 - **Stack**: WebDriverIO v9 + Mocha + Chai + Mochawesome
-- **Config**: `config/wdio.local.conf.js` (local), `config/wdio.ci.conf.js` (CI)
+- **Config**: `config/wdio.local.conf.js` (local, headed), `config/wdio.ci.conf.js` (CI, headless)
 - **Reports**: Auto-generated in `./reports/` via `onComplete` hook
 - **Logs**: Pino logger with in-memory buffer attached to Mochawesome context
+- **Headless**: CI config runs headless via `beforeSession` hook; local config toggles via `HEADLESS=true` env var
 
 ## Responsibilities
 
@@ -55,6 +56,7 @@ npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run
 - Ensures all `@tc_` tests are discoverable
 - Catches syntax errors, missing files, import issues
 - Must pass before any real test execution
+- For CI dry-run: `npx wdio run ./config/wdio.ci.conf.js --suite regression --dry-run`
 
 ### 3. Parallel Run
 ```bash
@@ -97,6 +99,7 @@ Always report:
 | `npm run test:api` | API specs only |
 | `npm run test:tag --tag="@tc_1"` | Specific tag |
 | `npm run collect` | Dry-run verification |
+| `npm run test:ci` | CI/CD headless run |
 | `npm run report` | Open HTML report |
 
 ## Guardrails

@@ -55,7 +55,15 @@ npm run report
 - Generate Mochawesome HTML report
 - Open report in browser
 
-### 6. Lint
+### 6. CI/CD Headless Verification
+```bash
+npm run test:ci
+```
+- Run full regression headless via `config/wdio.ci.conf.js`
+- Headless Chrome (`--headless=new`), minimal logging, no report auto-open
+- Verify no session conflicts in CI environment
+
+### 7. Lint
 ```bash
 npx eslint src/ --ext .js
 ```

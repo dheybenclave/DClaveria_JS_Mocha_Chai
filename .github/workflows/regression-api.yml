@@ -41,7 +41,7 @@ jobs:
         run: npm ci
 
       - name: Run API suite
-        run: npx wdio run ./config/wdio.ci.conf.js --suite api --max-instances=${{ github.event.inputs.max_instances || '5' }}
+        run: npx wdio run ./config/wdio.ci.conf.js --suite api --maxInstances=${{ github.event.inputs.max_instances || '5' }}
         shell: pwsh
 
       - name: Upload mochawesome report

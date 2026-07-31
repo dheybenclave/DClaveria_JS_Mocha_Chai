@@ -8,14 +8,14 @@ on:
   workflow_dispatch:
     inputs:
       test_tag:
-        description: 'Run specific test tag (e.g., @tc_1, @web_tc_1, @api_tc_1, @e2e_1, @api_e2e_1)'
+        description: 'Run specific test tag (e.g., @tc_1, @api_tc_1, @booking_flight, @search_results, @home_page)'
         required: true
         default: '@tc_1'
       run_parallel:
         description: 'Run tests in parallel (max 5 instances)?'
         required: true
         type: boolean
-        default: false
+        default: true
       headless:
         description: 'Run in headless mode?'
         required: true
@@ -44,7 +44,7 @@ jobs:
         run: npm ci
 
       - name: Run WDIO tests
-        run: npx wdio run ./config/wdio.ci.conf.js --specs "${{ github.workspace }}/src/specs/web/**/*.spec.js" --specs "${{ github.workspace }}/src/specs/api/**/*.spec.js" --mochaOpts.grep="${{ github.event.inputs.test_tag }}" --max-instances=${{ fromJSON(github.event.inputs.run_parallel && '5' || '1') }}
+        run: npx wdio run ./config/wdio.ci.conf.js --specs "${{ github.workspace }}/src/specs/web/**/*.spec.js" --specs "${{ github.workspace }}/src/specs/api/**/*.spec.js" --mochaOpts.grep="${{ github.event.inputs.test_tag }}" --maxInstances=${{ fromJSON(github.event.inputs.run_parallel) && '5' || '1' }}
         shell: pwsh
 
       - name: Upload mochawesome report

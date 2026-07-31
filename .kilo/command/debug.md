@@ -41,9 +41,15 @@ npm run test:tag --tag="@tc_1" -- --logLevel=debug
 # Run single test with visible browser
 HEADLESS=false npm run test:tag --tag="@tc_1"
 
+# Run single test in local headless mode
+HEADLESS=true npm run test:tag --tag="@tc_1"
+
 # Run with debug logging
 LOG_LEVEL=debug npm run test:tag --tag="@tc_1"
 
 # Run with maxInstances=1 for stability
 npm run test:tag --tag="@tc_1" -- --maxInstances=1
+
+# Run in CI headless mode (no report auto-open)
+npx wdio run ./config/wdio.ci.conf.js --suite regression --mochaOpts.grep="@tc_1"
 ```
