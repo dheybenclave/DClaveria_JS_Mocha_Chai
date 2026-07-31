@@ -304,9 +304,6 @@ expect(actualText, `Expected text to include "${expectedText}"`).to.include(expe
 |--------|-------|
 | `logger.info(msg)` | Standard step logging |
 | `logger.debug(msg)` | Detailed diagnostics |
-| `logger.warn(msg)` | Warnings |
-| `logger.error(msg)` | Failures |
-| `logger.pass(msg)` | Pass confirmations |
 
 ### Safety Rules
 

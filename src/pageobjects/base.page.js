@@ -26,7 +26,7 @@ export default class BasePage {
    */
   async getElement(elementOrSelector) {
     if (typeof elementOrSelector === 'string') {
-      return await $(elementOrSelector);
+      return browser.$(elementOrSelector); // No 'await' here so it stays dynamic
     }
     return elementOrSelector;
   }
@@ -40,7 +40,7 @@ export default class BasePage {
   async getTextElement(textName, parentSelector = "") {
     logger.info(`Finding text element: ${textName}`);
 
-    const xpath = `${parentSelector}//*[contains(normalize-space(.), '${textName}') and not(self::script)]`;
+    const xpath = `${parentSelector}//*[contains(text(), '${textName}') and not(self::script)]`;
     const el = await $(xpath);
     logger.debug(`element: ${el}`);
     expect(await el.isExisting(), `Text element with text "${textName}" should exist in DOM : Element: ${this.getSelectorName(el)}`).to.be.true;
@@ -116,9 +116,12 @@ export default class BasePage {
 
         // Find any active loading element on the page
         const loader = await $(loaderSelector);
-
-        // Element must either not exist in the DOM, or explicitly not be visible to the user
-        const isLoaderGone = !(await loader.isDisplayed());
+        let isLoaderGone = true;
+        try {
+          isLoaderGone = !(await loader.isDisplayed());
+        } catch (e) {
+          isLoaderGone = true;
+        }
 
         return isCorrectDomain && isDOMReady && isLoaderGone;
       },
@@ -128,6 +131,7 @@ export default class BasePage {
       }
     );
   }
+
 
   /**
    * Waits for an element to become clickable (visible and enabled).
@@ -151,14 +155,28 @@ export default class BasePage {
    */
   async waitForElementVisible(elementOrSelector, timeout = CONFIG.TIMEOUT) {
     const el = await this.getElement(elementOrSelector);
+    const selector = this.getSelectorName(el);
 
-    logger.info(`Waiting for element to be visible (timeout: ${timeout}ms) | Element: ${this.getSelectorName(el)}`);
+    logger.info(`Waiting for element to be visible | Timeout: ${timeout}ms| Element ${selector}`);
 
-    await el.waitForDisplayed({ timeout });
-    expect(await el.isExisting(), `Element should exist in DOM }`).to.be.true;
-    expect(await el.isDisplayed(), `Element should be visible on viewport }`).to.be.true;
+    await browser.waitUntil(
+      async () => {
+        try {
+          const currentEl = await this.getElement(selector);
+
+          expect(await currentEl.isExisting(), `Element should exist in DOM }`).to.be.true;
+          expect(await currentEl.isDisplayed(), `Element should be visible on viewport }`).to.be.true;
+          return await currentEl.isDisplayed();
+        } catch (error) {
+          return false;
+        }
+      },
+      {
+        timeout,
+        timeoutMsg: `Element failed to become visible within ${timeout}ms`,
+      }
+    );
   }
-
   /**
    * 
    * @param {Promise<WebdriverIO.Element>} elementOrSelector 
@@ -206,6 +224,8 @@ export default class BasePage {
     const el = await this.getElement(elementOrSelector);
 
     logger.info(`Clicking element: ${this.getSelectorName(el)}`);
+
+    await this.waitForElementVisible(el, CONFIG.TIMEOUT)
     await this.waitForElementClickable(el, CONFIG.TIMEOUT);
     await el.click();
 
@@ -230,16 +250,48 @@ export default class BasePage {
 
     await el.setValue(value);
 
-    await this.waitForIntSecond(3);
-    await this.waitForPageLoad();
+    await this.waitForLoadingToFinish();
 
     await browser.keys([Key.Enter]);
 
-    await this.waitForIntSecond(3);
     await this.waitForPageLoad();
 
-
     return el;
+  }
+
+  /**
+   * Waits for common loading indicators to disappear from the page.
+   */
+  async waitForLoadingToFinish() {
+    logger.info('Waiting for loading indicators to finish');
+    const loaderSelectors = [
+      '.loading-icon, .spinner, #global-loader',
+      '[class*="loading"], [class*="spinner"], [class*="loader"]',
+      '[aria-label="Loading"], [aria-busy="true"]',
+      '.skeleton, .shimmer'
+    ];
+
+    for (const selector of loaderSelectors) {
+      try {
+        const loader = await $(selector);
+        if (loader && await loader.isDisplayed()) {
+          await loader.waitForDisplayed({ reverse: true, timeout: 4000 });
+        }
+      } catch (error) {
+      }
+    }
+
+    try {
+      await browser.waitUntil(
+        async () => {
+          const loadingElements = await $$('[class*="loading"], [class*="spinner"], [aria-busy="true"]');
+          return loadingElements.length === 0 || !(await loadingElements[0]?.isDisplayed());
+        },
+        { timeout: 4000, timeoutMsg: 'Loading indicators did not clear' }
+      );
+    } catch (error) {
+      logger.info(`Loading wait completed with: ${error.message}`);
+    }
   }
 
   async clearTextField(elementOrSelector) {

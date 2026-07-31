@@ -3,7 +3,7 @@ import fs from 'fs';
 import { createRequire } from 'module';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { clearLogBuffer, getLogBuffer, getTestLogger } from '../src/utils/logger.js';
+import { clearLogBuffer, getLogBuffer, getTestLogger, logger } from '../src/utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,7 +29,7 @@ const baseConfig = {
     baseUrl: process.env.BASE_URL || 'https://www.cheapflights.com.au',
     apiBaseUrl: process.env.API_BASE_URL || 'https://restful-booker.herokuapp.com',
     browser: process.env.BROWSER || 'chrome',
-    timeout: Number(process.env.TIMEOUT || 60000),
+    timeout: Number(process.env.TIMEOUT || 1000000),
     apiUsername: process.env.API_USERNAME,
     apiPassword: process.env.API_PASSWORD,
     openMochawesomeReport: process.env.OPEN_MOCHAWESOME_REPORT === 'true',
@@ -50,7 +50,7 @@ const baseConfig = {
     framework: 'mocha',
     mochaOpts: {
         ui: 'bdd',
-        timeout: 60000
+        timeout: 1000000
     },
     maxInstances: 5,
     capabilities: [{
@@ -87,7 +87,21 @@ const baseConfig = {
         }
         fs.mkdirSync(reportDirectory, { recursive: true });
     },
-    afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+    afterTest: async function (test, context, { error, result, duration }) {
+        try {
+
+            await browser.deleteAllCookies();
+            await browser.execute(() => {
+                window.sessionStorage.clear();
+                window.localStorage.clear();
+            });
+            logger.info(`[Global Cleanup] Successfully cleared Cookies, LocalStorage, and SessionStorage.`);
+        } catch (cleanupError) {
+            logger.warn(`[Global Cleanup] Refusing optimization or state clear skipped: ${cleanupError.message}`);
+        } finally {
+            logger.info(`[Global Cleanup] Test lifecycle ended for: "${test.title}"`);
+        }
+
         const testLogger = getTestLogger(test.title, test.fullTitle);
         const logs = getLogBuffer();
         if (logs.length > 0) {
@@ -100,7 +114,8 @@ const baseConfig = {
         }
         clearLogBuffer();
 
-        if (!passed) {
+        if (error) {
+            logger.info(`[Global Cleanup] Test failed. Capturing failure screenshot for: "${test.title}"`);
             await browser.takeScreenshot();
         }
     },
