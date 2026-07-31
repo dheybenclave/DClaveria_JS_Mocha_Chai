@@ -1,6 +1,6 @@
 # AGENTS.md - Unified AI Agent Coding Guidelines
 
-This document provides commands and code style guidelines for **all AI coding agents** operating in this WebDriverIO Mocha Chai test automation project. It applies to Kilo, Claude, and other AI platforms.
+This document provides commands and code style guidelines for **all AI coding agents** operating in this WebDriverIO Mocha Chai test automation project. It applies to Kilo and other AI platforms.
 
 ---
 

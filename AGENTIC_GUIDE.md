@@ -18,7 +18,6 @@ The agentic QA workflow enables AI agents and QA engineers to:
 | Platform | Config Path | Agent Definitions | Commands |
 |----------|-------------|-------------------|----------|
 | **Kilo** | `.kilo/kilo.json` | `.kilo/agent/` | `.kilo/command/` |
-| **Claude** | `.claude/settings.json` | `.github/agents/` | `.claude/commands/` |
 
 ---
 

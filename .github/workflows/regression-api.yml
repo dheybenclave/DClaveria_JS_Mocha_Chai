@@ -40,6 +40,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify spec discovery
+        run: |
+          Write-Host "Listing spec files:"
+          Get-ChildItem -Path src/specs -Recurse -Filter *.spec.js | ForEach-Object { Write-Host $_.FullName }
+        shell: pwsh
+
       - name: Run API suite
         run: npx wdio run ./config/wdio.ci.conf.js --suite api --maxInstances=${{ github.event.inputs.max_instances || '5' }}
         shell: pwsh
