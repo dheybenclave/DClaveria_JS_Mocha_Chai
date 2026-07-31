@@ -27,8 +27,7 @@ logs/
 .DS_Store
 Thumbs.db
 
-# IDE
-.vscode/
+# IDEs
 .idea/
 *.swp
 *.swo

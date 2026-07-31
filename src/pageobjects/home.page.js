@@ -67,7 +67,7 @@ export default class HomePage extends BasePage {
   }
 
   get searchButton() {
-    return $('[data-testid="search-button"], button[type="submit"], .search-button');
+    return $('button[aria-label="Search"]');
   }
 
   get searchResultSection() {
@@ -77,13 +77,15 @@ export default class HomePage extends BasePage {
   get searchResultsContainer() {
     return $$('div[class="Fxw9-result-item-container"]')
   }
-  get firstSearchResult() {
-    return $('[data-testid="flight-result"]:first-child, .flight-result:first-child');
-  }
 
   get compareInputCheckButton() {
-    return $(`(//input[contains(@id,'en_AU_FFDCMP2')]/ancestor::span)[1]`)
+    return $("//input[contains(@id,'en_AU_FFDCMP2')]/parent::span")
   }
+
+  get closeDialogButton() {
+    return $(`//div[@role="dialog"]//span[contains(@class,'BLL2-close')]`)
+  }
+
 
   /**
    * Checks whether a given text is displayed on the page.
@@ -159,6 +161,7 @@ export default class HomePage extends BasePage {
     let parent = await el.parentElement();
 
     await this.clickElement(el);
+    await this.clickElementIfExist(el);
 
     await this.waitForIntSecond(2);
 
@@ -249,12 +252,10 @@ export default class HomePage extends BasePage {
     if (trip_type !== null) {
       await this.selectTripType(trip_type);
     }
-
+    await this.waitForIntSecond(2);
     await this.clickElementIfExist(this.compareInputCheckButton);
 
     await this.clickElement(this.searchButton);
-
-    await this.waitForSearchResults();
 
   }
 
@@ -362,7 +363,7 @@ export default class HomePage extends BasePage {
       const { adults = 1, children = 0, infants_on_lap = 0, cabin_class } = trip_type;
 
       if (cabin_class) {
-        const cabinOption = await this.getTextElement(cabin_class, "//span[contains(@class,'AFFP-body')]");
+        const cabinOption = await this.getTextElement(cabin_class, "//div[contains(text(),'Cabin class')]//parent::*");
         await this.waitForElementVisible(cabinOption, 10000);
         await this.clickElement(cabinOption);
       }

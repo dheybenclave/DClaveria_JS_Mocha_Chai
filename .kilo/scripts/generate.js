@@ -18,19 +18,16 @@ import FlightSearchPage from '../../src/pageobjects/search.page.js';
 import logger from '../../src/utils/logger.js'; 
 
 describe('Generated Test: ${requirement}', () => {
-    let homePage;
-    let searchPage;
+   
+  const homePage = new HomePage();
+  const commonComponent = new NavbarComponent();
 
-    before(() => {
-        homePage = new HomePage();
-        searchPage = new FlightSearchPage();
-        logger.info('Test suite initialized');
-    });
+  beforeEach(async () => {
+    // Destroys current browser state and spins up a brand new instance
+    await browser.reloadSession();
+    logger.info('Navigating to home page');
 
-    beforeEach(async () => {
-        logger.info('Navigating to home page');
-        await homePage.open();
-    });
+  });
 
     it('@tc_N should ${requirement}', async () => {
         logger.info('Executing: ${requirement}');

@@ -14,6 +14,9 @@ export default class NavbarComponent extends BasePage {
     get headerSection() {
         return $('div[class*=HeaderV2]');
     }
+    get loading() {
+        return $(`//*[contains(text(),'Loading')]`);
+    }
 
     /**
      * Verifies the logo is displayed.

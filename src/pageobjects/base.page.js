@@ -154,6 +154,7 @@ export default class BasePage {
    * @param {number} [timeout=CONFIG.TIMEOUT] - Maximum wait time in milliseconds.
    */
   async waitForElementVisible(elementOrSelector, timeout = CONFIG.TIMEOUT) {
+
     const el = await this.getElement(elementOrSelector);
     const selector = this.getSelectorName(el);
 
@@ -177,6 +178,39 @@ export default class BasePage {
       }
     );
   }
+
+  /**
+  * Waits for an element to disappear in the viewport.
+   * @param {string|WebdriverIO.Element} elementOrSelector - Element reference or CSS/XPath selector.
+   * @param {number} [timeout=CONFIG.TIMEOUT] - Maximum wait time in milliseconds.
+  
+   */
+  async waitForElementToDisappear(elementOrSelector, timeout = CONFIG.TIMEOUT) {
+    const el = await this.getElement(elementOrSelector);
+    const selector = this.getSelectorName(el);
+
+    logger.info(`Waiting for element to disappear | Timeout: ${timeout}ms | Element: ${selector}`);
+
+    await browser.waitUntil(
+      async () => {
+        try {
+          const currentEl = await this.getElement(selector);
+
+          if (!(await currentEl.isExisting())) {
+            return true;
+          }
+          return !(await currentEl.isDisplayed());
+        } catch (error) {
+          return true;
+        }
+      },
+      {
+        timeout,
+        timeoutMsg: `Element failed to disappear within ${timeout}ms | Element: ${selector}`,
+      }
+    );
+  }
+
   /**
    * 
    * @param {Promise<WebdriverIO.Element>} elementOrSelector 
@@ -188,7 +222,8 @@ export default class BasePage {
     logger.info(`Clicking element if exist : ${this.getSelectorName(el)}`);
 
     this.waitForIntSecond(2);
-    if (await el.isExisting() && el.isClickable()) {
+
+    if (await el.isExisting()) {
 
       await el.click();
       isExist = true;
@@ -226,7 +261,7 @@ export default class BasePage {
     logger.info(`Clicking element: ${this.getSelectorName(el)}`);
 
     await this.waitForElementVisible(el, CONFIG.TIMEOUT)
-    await this.waitForElementClickable(el, CONFIG.TIMEOUT);
+    // await this.waitForElementClickable(el, CONFIG.TIMEOUT);
     await el.click();
 
     return el;

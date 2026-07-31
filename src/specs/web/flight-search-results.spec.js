@@ -1,26 +1,26 @@
 import { expect } from 'chai';
-import HomePage from '../../pageobjects/home.page.js';
 import NavbarComponent from '../../components/navbar.component.js';
+import HomePage from '../../pageobjects/home.page.js';
 import { DataManager } from '../../utils/data.manager.js';
 import logger from '../../utils/logger.js';
 
 
-describe('Validate and Verify Search Flight Results ', () => {
+describe('@smoke @search_results Validate and Verify Search Flight Results ', () => {
 
 
-  let homePage, commonComponent;
+  const homePage = new HomePage();
+  const commonComponent = new NavbarComponent();
 
   beforeEach(async () => {
-    homePage = new HomePage();
-    commonComponent = new NavbarComponent();
-
+    // Destroys current browser state and spins up a brand new instance
+    await browser.reloadSession();
     logger.info('Navigating to home page');
 
   });
 
-  it('@tc_3 @web_tc_3 @positive Search Flight Results Checking', async () => {
+  it('@tc_5 @positive Search Flight Results Checking', async () => {
 
-    logger.info('TC_3: [Positive Testing] Validating search results display');
+    logger.info('TC_5: [Positive Testing] Validating search results display');
 
     const flightData = DataManager.getWebData('flight_test_data.json').valid_flights[1];
 
@@ -43,6 +43,8 @@ describe('Validate and Verify Search Flight Results ', () => {
       flightData.trip_type
     );
 
+    await homePage.waitForSearchResults();
+
     const hasResults = await homePage.hasSearchResults(
       flightData.from,
       flightData.to,
@@ -56,8 +58,8 @@ describe('Validate and Verify Search Flight Results ', () => {
 
   });
 
-  it('@tc_3_1 @web_tc_3_1 @negative Should handle search results with invalid parameters, conditions and display error messages', async () => {
-    logger.info('TC_3_1: [Negative Testing] searching flights results with invalid parameters and conditions');
+  it('@tc_6 @negative Should handle search results with invalid parameters, conditions and display error messages', async () => {
+    logger.info('TC_6: [Negative Testing] searching flights results with invalid parameters and conditions');
 
     const flightData = DataManager.getWebData('flight_test_data.json').restricted_flights[0];
     const flightData2 = DataManager.getWebData('flight_test_data.json').nofound_flights[0];
@@ -87,11 +89,15 @@ describe('Validate and Verify Search Flight Results ', () => {
       "Read more"
     ];
 
+    await homePage.waitForIntSecond(3);
+
     for (const errMsg of listOfRequiredFieldErrorMsg) {
       await homePage.verifyContainsText(errMsg);
     }
 
     await homePage.clickElementByText("Back to search");
+
+    await homePage.clickElementIfExist(homePage.closeDialogButton);
 
     await homePage.waitForLoadingToFinish();
 
@@ -116,7 +122,7 @@ describe('Validate and Verify Search Flight Results ', () => {
 
     await homePage.waitForPageLoad();
 
-    await homePage.waitForIntSecond(10);
+    await homePage.waitForElementToDisappear(commonComponent.loading);
 
     for (const errMsg of listNoFoundErrorMsg) {
       await homePage.verifyContainsText(errMsg);
@@ -124,5 +130,4 @@ describe('Validate and Verify Search Flight Results ', () => {
 
   });
 });
-
 

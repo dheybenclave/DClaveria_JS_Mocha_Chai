@@ -1,22 +1,23 @@
 import { expect } from 'chai';
 
-import HomePage from '../../pageobjects/home.page.js';
 import NavbarComponent from '../../components/navbar.component.js';
+import HomePage from '../../pageobjects/home.page.js';
 import logger from '../../utils/logger.js';
 
-describe('@smoke Validate and Verify Elements Home Page', () => {
+describe('@smoke @home_page Validate and Verify Elements Home Page', () => {
 
 
-  let commonComponent, homePage;
+  const homePage = new HomePage();
+  const commonComponent = new NavbarComponent();
 
   beforeEach(async () => {
-    homePage = new HomePage();
-    commonComponent = new NavbarComponent();
-
+    // Destroys current browser state and spins up a brand new instance
+    await browser.reloadSession();
     logger.info('Navigating to home page');
 
   });
-  it('@tc_1 @web_tc_1 @positive Should Check Logo and Login Elements are Displayed on Home Page', async () => {
+
+  it('@tc_1 @positive Should Check Logo and Login Elements are Displayed on Home Page', async () => {
 
     logger.info('TC_1:[Positive Testing] logo and login elements on home page');
 
@@ -35,12 +36,12 @@ describe('@smoke Validate and Verify Elements Home Page', () => {
 
     await homePage.clickElement(homePage.signButton);
 
-    await homePage.waitForElementVisible(homePage.loginDialog, 5000);
+    await homePage.waitForElementVisible(homePage.loginDialog);
 
   });
 
-  it('@tc_1_2 @web_tc_1_2 @negative Should throw error when asserting text that does not exist on the page', async () => {
-    logger.info('TC_1_1: [Negative Testing] to home page');
+  it('@tc_1 @negative Should throw error when asserting text that does not exist on the page', async () => {
+    logger.info('TC_2: [Negative Testing] to home page');
 
     await homePage.open();
     await homePage.waitForPageLoad();

@@ -47,16 +47,15 @@ import NewPage from '../../src/pageobjects/<app>.page.js';
 import logger from '../../src/utils/logger.js';
 
 describe('@smoke @e2e_1 <Feature Name>', () => {
-  let newPage;
 
-  before(() => {
-    newPage = new NewPage();
-    logger.info('Test suite initialized');
-  });
+  const homePage = new HomePage();
+  const commonComponent = new NavbarComponent();
 
   beforeEach(async () => {
-    await newPage.open();
-    await newPage.isOnHomePage();
+    // Destroys current browser state and spins up a brand new instance
+    await browser.reloadSession();
+    logger.info('Navigating to home page');
+
   });
 
   describe('<Feature Group>', () => {

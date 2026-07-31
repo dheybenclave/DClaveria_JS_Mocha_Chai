@@ -1,0 +1,76 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug: Web Test Script by Tag",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "wdio",
+        "run",
+        "${workspaceFolder}/config/wdio.local.conf.js",
+        "--suite",
+        "web",
+        "--mochaOpts.grep",
+        "@booking_flight",
+        "--maxInstances",
+        "1"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+
+    {
+      "name": "Debug: Full Regression",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "wdio",
+        "run",
+        "${workspaceFolder}/config/wdio.local.conf.js",
+        "--suite",
+        "regression",
+        "--maxInstances",
+        "1"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug: Web Only",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "wdio",
+        "run",
+        "${workspaceFolder}/config/wdio.local.conf.js",
+        "--suite",
+        "web",
+        "--maxInstances",
+        "1"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug: API Only",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "wdio",
+        "run",
+        "${workspaceFolder}/config/wdio.local.conf.js",
+        "--suite",
+        "api",
+        "--maxInstances",
+        "1"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
