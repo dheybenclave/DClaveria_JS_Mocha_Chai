@@ -36,6 +36,17 @@ This guide defines the standard operating procedures for QA engineers using the 
 4. **Heal** — Use the test-healer agent to fix broken selectors/waits
 5. **Verify** — Run the full validation sequence before committing
 
+### Reference Examples (MANDATORY Templates)
+
+| Domain | Reference Test | File | What It Demonstrates |
+|--------|---------------|------|---------------------|
+| **WEB UI** | `@tc_5` | `src/specs/web/flight-search-results.spec.js` | Fresh session per test, data-driven, page object actions, descriptive assertions, proper cleanup |
+| **API** | `@tc_7` | `src/specs/api/booking.spec.js` | Suite-level setup, per-test cleanup by ID, status validation, JSON property checks |
+
+**Rule:** All new tests MUST follow these reference templates exactly.
+- **WEB UI tests** → follow `@tc_5` pattern exactly
+- **API tests** → follow `@tc_7` pattern exactly
+
 ### Test Tag Convention
 
 | Tag | Purpose |
@@ -79,7 +90,7 @@ npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run
 
 ### Page Object Conventions
 
-1. Extend `BasePage`
+1. Extend `BasePage` or a component that extends `BasePage`
 2. Define element getters with resilient selectors
 3. Use `logger.info()` for each action
 4. Return element references from action methods

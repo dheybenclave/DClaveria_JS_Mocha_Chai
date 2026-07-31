@@ -21,29 +21,32 @@ npm run agentic:bootstrap
 ```
 - Verify Node.js version (>= 18)
 - Verify WDIO CLI installed
-- Verify Chrome/Chromedriver available
-- Verify mochawesome-report directory exists
+- Verify Chrome browser available
+- Verify reference templates pass (`@tc_5`, `@tc_7`)
 
 ### 2. Collect — Verify Test Discovery
 ```bash
-npx wdio run ./wdio.conf.js --suite regression --dry-run
+npm run collect
 ```
 - Verify all `@tc_` tagged tests are discoverable
 - Check for collection errors or warnings
+- Verify all page objects import correctly
 
 ### 3. Run Targeted Tests
 ```bash
-npm run test:tag --tag="@tc_1"
+npm run test:tag --tag="@tc_5"
+npm run test:tag --tag="@tc_7"
 ```
-- Run `@tc_1` specifically for fast feedback
-- Verify the test passes
+- Run reference templates first
+- Verify both pass before running new tests
 
 ### 4. Run Full Regression
 ```bash
-npm run test:tag --tag="@e2e_1"
+npm run test:parallel
 ```
-- Run all E2E regression tests
+- Run all web + API specs with `maxInstances=5`
 - Verify no regressions introduced
+- Check for parallel session conflicts
 
 ### 5. Generate Report
 ```bash
@@ -54,17 +57,10 @@ npm run report
 
 ### 6. Lint
 ```bash
-npm run lint
+npx eslint src/ --ext .js
 ```
 - Run ESLint on all source and test files
 - Fix any linting errors
-
-### 7. Verify
-```bash
-npm run verify
-```
-- Run full validation sequence
-- Confirm all checks pass
 
 ## Expected Output
 
@@ -73,3 +69,4 @@ npm run verify
 - No linting errors
 - No collection or discovery errors
 - All steps logged with `logger.info()`
+- No parallel session conflicts

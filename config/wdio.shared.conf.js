@@ -65,6 +65,18 @@ const baseConfig = {
             excludeSwitches: ['enable-logging']
         }
     }],
+    beforeSession: function (config, capabilities) {
+        if (config.headless) {
+            const caps = Array.isArray(capabilities) ? capabilities : [capabilities];
+            caps.forEach((cap) => {
+                if (cap['goog:chromeOptions']) {
+                    const args = cap['goog:chromeOptions'].args || [];
+                    args.push('--headless=new', '--disable-gpu', '--no-sandbox', '--window-size=1920,1080');
+                    cap['goog:chromeOptions'].args = args.filter(arg => arg !== '--start-maximized');
+                }
+            });
+        }
+    },
     reporters: [
         'spec',
         [

@@ -3,7 +3,7 @@ import { config as wdioShared } from './wdio.shared.conf.js';
 export const config = {
     ...wdioShared,
     runner: 'local',
-    headless: false,
+    headless: process.env.HEADLESS === 'true',
     logLevel: 'warn',
     logLevels: {
         webdriver: 'error',

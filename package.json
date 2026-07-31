@@ -11,6 +11,7 @@
     "test:api": "wdio run ./config/wdio.local.conf.js --specs ./src/specs/api/**/*.spec.js --openMochawesomeReport=true --maxInstances=5",
     "test:web": "wdio run ./config/wdio.local.conf.js --specs ./src/specs/web/**/*.spec.js --openMochawesomeReport=true --maxInstances=5",
     "test:tag": "wdio run ./config/wdio.local.conf.js --suite regression --mochaOpts.grep=\"%npm_config_tag%\" --openMochawesomeReport=true --maxInstances=5",
+    "test:ci": "wdio run ./config/wdio.ci.conf.js --suite regression",
     "test:web:tag": "wdio run ./config/wdio.local.conf.js --specs ./src/specs/web/**/*.spec.js --mochaOpts.grep=\"%npm_config_tag%\" --openMochawesomeReport=true --maxInstances=5",
     "test:api:tag": "wdio run ./config/wdio.local.conf.js --specs ./src/specs/api/**/*.spec.js --mochaOpts.grep=\"%npm_config_tag%\" --openMochawesomeReport=true --maxInstances=5",
     "wdio": "wdio run ./config/wdio.local.conf.js",

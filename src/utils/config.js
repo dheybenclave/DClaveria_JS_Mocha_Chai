@@ -32,19 +32,8 @@ export const CONFIG = {
   SCREENSHOT_DIR: path.resolve(__dirname, '../../logs/screenshots'),
   VIDEO_DIR: path.resolve(__dirname, '../../logs/videos'),
 
-  API_USERNAME: process.env.API_USERNAME ,
-  API_PASSWORD: process.env.API_PASSWORD ,
-
-  FLIGHT_SEARCH: {
-    FROM_CITY: 'Sydney',
-    TO_CITY: 'Melbourne',
-    DEPARTURE_DATE: '2025-09-01',
-    RETURN_DATE: '2025-09-10',
-    ADULTS: 1,
-    CHILDREN: 0,
-    INFANTS: 0
-  },
-
+  API_USERNAME: process.env.API_USERNAME,
+  API_PASSWORD: process.env.API_PASSWORD,
   OPEN_MOCHAWESOME_REPORT: process.env.OPEN_MOCHAWESOME_REPORT === 'true'
 };
 

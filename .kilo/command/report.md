@@ -15,7 +15,7 @@ npm run report
 
 ## Report Generation
 
-Reports are auto-generated after every test run via the `onComplete` hook in `wdio.conf.js`.
+Reports are auto-generated after every test run via the `onComplete` hook in `config/wdio.shared.conf.js`.
 
 ### Report Location
 
@@ -29,8 +29,17 @@ Reports are auto-generated after every test run via the `onComplete` hook in `wd
 - Pass/fail status per test
 - Execution duration per test
 - Screenshots on failure
-- Application logs per test
+- Application logs per test (from Pino buffer)
 - Stack traces for failures
+- Deduplicated nested suites
+
+### Reference Test Summary
+
+The report includes the mandatory reference tests:
+- `@tc_5` — WEB UI reference test
+- `@tc_7` — API reference test
+
+These serve as the baseline for all new test generation.
 
 ### Opening the Report
 
@@ -62,4 +71,5 @@ npx marge ./reports/wdio-ma-merged.json --reportDir ./reports --reportFilename m
 | No HTML report | `onComplete` hook failed | Check console for errors |
 | Missing screenshots | `takeScreenshot` not called | Ensure `afterTest` hook runs |
 | Missing logs | Log buffer not flushed | Check `clearLogBuffer()` call |
-| Duplicate suites | Upstream wdio-mochawesome bug | `dedupeSuites()` in `wdio.conf.js` |
+| Duplicate suites | Upstream wdio-mochawesome bug | `dedupeSuites()` in `wdio.shared.conf.js` |
+| Report won't open | `openMochawesomeReport` is false | Set `openMochawesomeReport: true` in local config |

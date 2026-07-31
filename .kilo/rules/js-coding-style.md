@@ -10,7 +10,7 @@ alwaysApply: true
 - **ES6+**: Use async/await, arrow functions, destructuring
 - **Modules**: Use ES modules (`import/export`), not CommonJS
 - **Naming**: camelCase for variables/functions, PascalCase for classes
-- **Files**: `.page.js` for page objects, `.spec.js` for tests
+- **Files**: `.page.js` for page objects, `.spec.js` for tests, `.component.js` for components
 
 ## Async Patterns
 

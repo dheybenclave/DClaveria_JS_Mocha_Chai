@@ -8,7 +8,7 @@ alwaysApply: true
 ## Secrets Management
 
 - **NO hardcoded secrets** in code
-- All credentials in `wdio.conf.js` `config` block
+- All credentials in `config/wdio.shared.conf.js` `config` block
 - Never commit passwords, tokens, or API keys
 - Use `config.apiUsername`, `config.apiPassword`
 - Never store secrets in JSON test data files
@@ -38,10 +38,11 @@ console.log('Password: admin123');
 ## CI/CD Security
 
 - Use environment variables for secrets in pipeline
-- Never expose `wdio.conf.js` credentials in logs
+- Never expose `config/wdio.shared.conf.js` credentials in logs
 - Mask secrets in CI/CD output
 - Rotate credentials regularly
-- Use `config` block — never `.env` files
+- Use `.env` for local secrets only (git-ignored)
+- Use `config` block in `wdio.shared.conf.js` for all test config
 
 ## Data Safety
 
