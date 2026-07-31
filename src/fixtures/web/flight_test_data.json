@@ -1,8 +1,8 @@
 {
   "valid_flights": [
     {
-      "from": "Boracay, Philippines (MPH",
-      "to": "Kalibo, Philippines (KLO",
+      "from": "Boracay, Philippines (MPH)",
+      "to": "Kalibo, Philippines (KLO)",
       "departure_date": "2026-10-04",
       "return_date": "2026-12-10",
       "trip_type": {
@@ -13,8 +13,8 @@
       }
     },
     {
-      "from": "Cebu City, Cebu, Philippines (CEB",
-      "to": "Iloilo City, Philippines (ILO",
+      "from": "Cebu City, Cebu, Philippines (CEB)",
+      "to": "Iloilo City, Philippines (ILO)",
       "departure_date": "2026-12-10",
       "return_date": "2026-12-20",
       "trip_type": {
@@ -28,23 +28,23 @@
   "invalid_flights": [
     {
       "from": "InvalidCityDheoClaveria",
-      "to": "Boracay, Philippines (MPH",
+      "to": "Boracay, Philippines (MPH)",
       "departure_date": "2025-09-01",
       "return_date": "2025-09-10"
     }
   ],
   "restricted_flights": [
     {
-      "from": "Rasht, Iran (RAS",
-      "to": "Sharjah, United Arab Emirates (SHJ",
+      "from": "Rasht, Iran (RAS)",
+      "to": "Sharjah, United Arab Emirates (SHJ)",
       "departure_date": "2026-12-12",
       "return_date": "2026-12-13"
     }
   ],
   "nofound_flights": [
     {
-      "from": "Boracay, Philippines (MPH",
-      "to": "Kalibo, Philippines (KLO",
+      "from": "Boracay, Philippines (MPH)",
+      "to": "Kalibo, Philippines (KLO)",
       "departure_date": "2026-12-12",
       "return_date": "2026-12-13",
       "trip_type": {
