@@ -362,6 +362,8 @@ export default class HomePage extends BasePage {
     if (trip_type && typeof trip_type === 'object') {
       const { adults = 1, children = 0, infants_on_lap = 0, cabin_class } = trip_type;
 
+      await this.waitForIntSecond(2);
+
       if (cabin_class) {
         const cabinOption = await this.getTextElement(cabin_class, "//div[contains(text(),'Cabin class')]//parent::*");
         await this.waitForElementVisible(cabinOption, 10000);

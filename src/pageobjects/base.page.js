@@ -26,7 +26,7 @@ export default class BasePage {
    */
   async getElement(elementOrSelector) {
     if (typeof elementOrSelector === 'string') {
-      return browser.$(elementOrSelector); // No 'await' here so it stays dynamic
+      return browser.$(elementOrSelector);
     }
     return elementOrSelector;
   }
