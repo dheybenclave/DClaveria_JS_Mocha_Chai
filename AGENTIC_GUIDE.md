@@ -33,10 +33,11 @@ The agentic QA workflow enables AI agents and QA engineers to:
 
 | Path | Description |
 |------|-------------|
-| `tests/web/**/*.spec.js` | UI E2E test specs with `@tc_` markers |
-| `tests/api/**/*.spec.js` | API test specs |
-| `src/pages/web/` | Web page objects with locators and actions |
-| `src/pages/api/` | API client/page objects |
+| `src/specs/web/**/*.spec.js` | UI E2E test specs with `@tc_` markers |
+| `src/specs/api/**/*.spec.js` | API test specs |
+| `src/pageobjects/` | Web page objects with locators and actions |
+| `src/pageobjects/base.page.js` | Base page with shared wait/assertion utilities |
+| `src/components/` | Reusable UI components (Navbar, etc.) that extend BasePage |
 | `src/utils/` | Configuration, helpers, logger utilities |
 | `./reports/` | Mochawesome HTML reports |
 | `.kilo/` | Kilo agentic AI configuration |
@@ -167,23 +168,40 @@ The following rule files are always applied when working in this repository:
 
 ### Structure
 
+Page objects can extend `BasePage` directly or extend reusable components (`NavbarComponent`) that themselves extend `BasePage`. Components encapsulate shared UI widgets and their associated selectors/actions.
+
 ```javascript
-import BasePage from '../base.page.js';
+// Extending a component (preferred for pages with shared navbar/header)
+import NavbarComponent from '../components/navbar.component.js';
 import { logger } from '../../../utils/logger.js';
 import { expect } from 'chai';
 
-export default class HomePage extends BasePage {
-  get logoImage() {
-    return $('div.mc6t-logo');
-  }
-
-  get loginButton() {
-    return $('a[href*="login"]');
+export default class HomePage extends NavbarComponent {
+  get carButton() {
+    return $('a[aria-label="Search for cars"]');
   }
 
   async clickCarButton() {
     logger.info('Clicking car button');
     await this.clickElement(this.carButton);
+  }
+}
+```
+
+```javascript
+// Extending BasePage directly (for pages without shared components)
+import BasePage from '../base.page.js';
+import { logger } from '../../../utils/logger.js';
+import { expect } from 'chai';
+
+export default class SearchPage extends BasePage {
+  get searchInput() {
+    return $('[data-testid="search-input"]');
+  }
+
+  async enterSearch(query) {
+    logger.info('Entering search query');
+    await this.enterText(this.searchInput, query);
   }
 }
 ```
@@ -437,12 +455,12 @@ This runs all pipeline steps sequentially.
 
 ### Page Object Conventions
 
-1. Extend `BasePage`
+1. Extend `BasePage` directly or extend a reusable component (e.g., `NavbarComponent`) that extends `BasePage`
 2. Define element getters with resilient selectors
 3. Use `logger.info()` for each action
 4. Return element references from action methods
 5. Use explicit waits — never `time.sleep()`
-6. Keep selectors in page objects only — never in specs
+6. Keep selectors in page objects and components only — never in specs
 
 ### Common Patterns
 

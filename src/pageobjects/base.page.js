@@ -40,7 +40,7 @@ export default class BasePage {
   async getTextElement(textName, parentSelector = "") {
     logger.info(`Finding text element: ${textName}`);
 
-    const xpath = `${parentSelector}//*[contains(text(), '${textName}') and not(self::script)]`;
+    const xpath = `${parentSelector}//*[contains(text(), "${textName}") and not(self::script)]`;
     const el = await $(xpath);
     logger.debug(`element: ${el}`);
     expect(await el.isExisting(), `Text element with text "${textName}" should exist in DOM : Element: ${this.getSelectorName(el)}`).to.be.true;
@@ -164,8 +164,8 @@ export default class BasePage {
         try {
           const currentEl = await this.getElement(selector);
 
-          expect(await currentEl.isExisting(), `Element should exist in DOM }`).to.be.true;
-          expect(await currentEl.isDisplayed(), `Element should be visible on viewport }`).to.be.true;
+          expect(await currentEl.isExisting(), `Element should exist in DOM | Element : ${selector}`).to.be.true;
+          expect(await currentEl.isDisplayed(), `Element should be visible on viewport | Element : ${selector}`).to.be.true;
           return await currentEl.isDisplayed();
         } catch (error) {
           return false;
@@ -253,6 +253,29 @@ export default class BasePage {
     await this.waitForLoadingToFinish();
 
     await browser.keys([Key.Enter]);
+
+    await this.waitForPageLoad();
+
+    return el;
+  }
+
+  /**
+ * Input text into an element identified by its visible text.
+ * @param {string|WebdriverIO.Element} elementOrSelector - Element reference or CSS/XPath selector.
+ * @param {string} value - Text value to enter.
+ * @returns {Promise<WebdriverIO.Element>} The target element.
+ */
+  async setText(elementOrSelector, value) {
+    logger.info(`Entering text into element`);
+    const el = await this.getElement(elementOrSelector);
+
+    await this.waitForElementVisible(el, CONFIG.TIMEOUT);
+
+    await this.clearTextField(el);
+
+    await el.setValue(value);
+
+    await this.waitForLoadingToFinish();
 
     await this.waitForPageLoad();
 

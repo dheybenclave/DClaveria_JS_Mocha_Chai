@@ -28,19 +28,31 @@
   "invalid_flights": [
     {
       "from": "InvalidCity",
-      "to": "Melbourne",
+      "to": "dheoClaveriaTEsting",
       "departure_date": "2025-09-01",
-      "return_date": "2025-09-10",
-      "expected_error": "No flights available"
+      "return_date": "2025-09-10"
     }
   ],
-  "invalid_dates": [
+  "restricted_flights": [
     {
-      "from": "Sydney",
-      "to": "Melbourne",
-      "departure_date": "2020-01-01",
-      "return_date": "2020-01-02",
-      "expected_error": "Invalid date"
+      "from": "Rasht, Iran (RAS)",
+      "to": "Sharjah, United Arab Emirates (SHJ)",
+      "departure_date": "2026-12-12",
+      "return_date": "2026-12-13"
+    }
+  ],
+  "nofound_flights": [
+    {
+      "from": "Boracay, Philippines (MPH)",
+      "to": "Kalibo, Philippines (KLO)",
+      "departure_date": "2026-12-12",
+      "return_date": "2026-12-13",
+      "trip_type": {
+        "adults": 9,
+        "children": 0,
+        "infants_on_lap": 0,
+        "cabin_class": "Business"
+      }
     }
   ],
   "credentials": [

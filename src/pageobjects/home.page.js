@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { Key } from 'webdriverio';
 import logger from '../utils/logger.js';
 import { formatDate } from '../utils/utils.js';
+
 import BasePage from './base.page.js';
 /**
  * Page object for the Cheapflights home page.
@@ -142,7 +143,7 @@ export default class HomePage extends BasePage {
     const isHome = url.includes('cheapflights.com.au');
     expect(isHome, `Expected to be on cheapflights.com.au, but got ${url}`).to.be.true;
 
-    this.waitForElementVisible(this.logoImage);
+    this.waitForElementVisible(this.logo);
     return isHome;
   }
 
@@ -151,21 +152,19 @@ export default class HomePage extends BasePage {
    * @param {Promise<WebdriverIO.Element>} element 
    * @param {string} value 
    */
-  async selectLocationGroup(element, value) {
+  async selectLocationGroup(element, value, isNegativeTest = false) {
     logger.info(`Select Location Group : ${value}`);
 
     let el = await this.getElement(element);
     let parent = await el.parentElement();
 
+    await this.clickElement(el);
 
+    await this.waitForIntSecond(2);
 
     let removeButton = await parent.$('.//div[@class="c_neb-item-close"]');
 
     while (await removeButton.isDisplayed()) {
-
-      await this.clickElement(el);
-
-      await this.waitForIntSecond(2);
 
       logger.info(`Removing Current Value in  ${this.getSelectorName(removeButton)}`);
       await browser.keys([Key.Backspace]);
@@ -174,12 +173,22 @@ export default class HomePage extends BasePage {
       removeButton = await parent.$('.//div[@class="c_neb-item-close"]');
     }
 
-    await this.enterText(element, value);
+    if (!isNegativeTest) {
+      await this.enterText(element, value);
+    }
+    else {
+      await el.setValue(value);
+      await this.waitForLoadingToFinish();
+      await this.waitForIntSecond(2);
+      await this.verifyContainsText("No matching locations found");
+    }
     await this.waitForPageLoad();
 
-    el = await this.getElement(element);
-    let actualText = await this.getElementTextValue(parent.$('.//div[@class="c_neb-item-value"]'), value);
-    expect(actualText, `Expected text to include "${value}"`).to.include(value);
+    if (!isNegativeTest) {
+      el = await this.getElement(element);
+      let actualText = await this.getElementTextValue(parent.$('.//div[@class="c_neb-item-value"]'), value);
+      expect(actualText, `Expected text to include "${value}"`).to.include(value);
+    }
 
   }
 
@@ -241,7 +250,7 @@ export default class HomePage extends BasePage {
       await this.selectTripType(trip_type);
     }
 
-    await this.clickElement(this.compareInputCheckButton);
+    await this.clickElementIfExist(this.compareInputCheckButton);
 
     await this.clickElement(this.searchButton);
 
@@ -353,7 +362,7 @@ export default class HomePage extends BasePage {
       const { adults = 1, children = 0, infants_on_lap = 0, cabin_class } = trip_type;
 
       if (cabin_class) {
-        const cabinOption = await this.getTextElement(cabin_class, "selectPassengerCount//span[contains(@class,'AFFP-body')]");
+        const cabinOption = await this.getTextElement(cabin_class, "//span[contains(@class,'AFFP-body')]");
         await this.waitForElementVisible(cabinOption, 10000);
         await this.clickElement(cabinOption);
       }

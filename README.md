@@ -22,7 +22,9 @@ A scalable WebDriverIO + Mocha + Chai framework following the Page Object Model.
 │   │   └── booking.api.js
 │   ├── specs/                     # Mocha test suites (Contains ONLY it() blocks and assertions)
 │   │   ├── web/
-│   │   │   └── cheapflights.spec.js
+│   │   │   ├── home-page.spec.js
+│   │   │   ├── flight-search-booking.spec.js
+│   │   │   └── flight-search-results.spec.js
 │   │   └── api/
 │   │       └── booking.spec.js
 │   └── utils/                     # Core system dependencies and helper functions
