@@ -29,6 +29,22 @@
       "lastname": "",
       "totalprice": 150,
       "expected_error": "validation error"
+    },
+    {
+      "firstname": "NoLastName",
+      "lastname": "",
+      "totalprice": 100,
+      "expected_error": "validation error"
+    },
+    {
+      "firstname": "Dheo",
+      "lastname": "User",
+      "totalprice": "not_a_number",
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2025-09-01",
+        "checkout": "2025-09-10"
+      }
     }
   ],
   "update_data": [
@@ -38,5 +54,9 @@
       "totalprice": 250,
       "additionalneeds": "Dinner"
     }
-  ]
+  ],
+  "filter_data": {
+    "firstname": "John",
+    "lastname": "Doe"
+  }
 }
