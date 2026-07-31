@@ -44,21 +44,23 @@ jobs:
         run: npm ci
 
       - name: Run WDIO tests
-        run: npx wdio run ./config/wdio.ci.conf.js --specs "${{ github.workspace }}/src/specs/web/**/*.spec.js" --specs "${{ github.workspace }}/src/specs/api/**/*.spec.js" --mochaOpts.grep="${{ github.event.inputs.test_tag }}" --maxInstances=${{ fromJSON(github.event.inputs.run_parallel) && '5' || '1' }}
+        run: npx wdio run ./config/wdio.ci.conf.js --specs "src/specs/web/**/*.spec.js" --specs "src/specs/api/**/*.spec.js" --mochaOpts.grep="${{ github.event.inputs.test_tag }}" --maxInstances=${{ fromJSON(github.event.inputs.run_parallel || 'true') && '5' || '1' }}
         shell: pwsh
 
       - name: Upload mochawesome report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mochawesome-report-tag-${{ github.event.inputs.test_tag }}
+          name: mochawesome-report-tag-${{ github.event.inputs.test_tag || 'all' }}
           path: reports/
+          if-no-files-found: ignore
           retention-days: 30
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: screenshots-tag-${{ github.event.inputs.test_tag }}
+          name: screenshots-tag-${{ github.event.inputs.test_tag || 'all' }}
           path: logs/screenshots/
+          if-no-files-found: ignore
           retention-days: 7

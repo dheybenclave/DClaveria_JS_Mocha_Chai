@@ -50,6 +50,7 @@ jobs:
         with:
           name: mochawesome-report-regression-web
           path: reports/
+          if-no-files-found: ignore
           retention-days: 30
 
       - name: Upload screenshots on failure
@@ -58,4 +59,5 @@ jobs:
         with:
           name: screenshots-regression-web
           path: logs/screenshots/
+          if-no-files-found: ignore
           retention-days: 7
