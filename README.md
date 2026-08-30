@@ -497,7 +497,7 @@ cp .env.example .env   # if .env.example exists
 | Command | What It Does |
 |---------|-------------|
 | `npm run test` | Run full suite (maxInstances=10) |
-| `npm run test:parallel` | Run all tests in parallel (maxInstances=5) |
+| `npm run test:parallel` | Run all tests in parallel (maxInstances=10) |
 | `npm run test:web` | Run web UI tests only |
 | `npm run test:api` | Run API tests only |
 | `npm run test:tag --tag="@tc_1"` | Run specific test case by tag |

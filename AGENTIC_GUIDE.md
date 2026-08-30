@@ -112,7 +112,7 @@ The agentic QA workflow enables AI agents and QA engineers to:
 ```bash
 # === Test Execution ===
 npm run test                    # Run all tests (maxInstances=10)
-npm run test:parallel          # Run all tests in parallel (maxInstances=5)
+npm run test:parallel          # Run all tests in parallel (maxInstances=10)
 npm run test:chrome            # Run with Chrome capability override
 npm run test:firefox           # Run with Firefox capability override
 npm run test:api               # Run API specs only

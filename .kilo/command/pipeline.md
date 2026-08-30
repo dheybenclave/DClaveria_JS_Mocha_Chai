@@ -44,7 +44,7 @@ npm run test:tag --tag="@tc_7"
 ```bash
 npm run test:parallel
 ```
-- Run all web + API specs with `maxInstances=5`
+- Run all web + API specs with `maxInstances=10`
 - Verify no regressions introduced
 - Check for parallel session conflicts
 

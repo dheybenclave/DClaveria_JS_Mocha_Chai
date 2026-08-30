@@ -1,6 +1,6 @@
 ---
 name: wdio-test-executor
-description: 'Use this agent when you need to execute, monitor, and analyze WebDriverIO test runs in local or CI/CD environments.'
+description: "Use this agent when you need to execute, monitor, and analyze WebDriverIO test runs in local or CI/CD environments."
 tools:
   - search
   - read
@@ -22,14 +22,14 @@ Your specialty is executing targeted tests, parsing mochawesome reports, and rep
 
 ## Execution Commands
 
-| Environment | Command | Notes |
-|-------------|---------|-------|
-| Local headed | `npm run test:tag --tag="@tc_1"` | Verbose logs, opens report |
-| Local headless | `HEADLESS=true npm run test:tag --tag="@tc_1"` | Headless Chrome |
-| CI/CD full | `npm run test:ci` | Headless, minimal logs, no auto-open |
-| CI/CD by tag | `npx wdio run ./config/wdio.ci.conf.js --suite regression --mochaOpts.grep="@tc_1"` | Override test_tag |
-| Dry-run | `npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run` | Discovery check |
-| Parallel | `npm run test:parallel` | maxInstances=5 |
+| Environment    | Command                                                                             | Notes                                |
+| -------------- | ----------------------------------------------------------------------------------- | ------------------------------------ |
+| Local headed   | `npm run test:tag --tag="@tc_1"`                                                    | Verbose logs, opens report           |
+| Local headless | `HEADLESS=true npm run test:tag --tag="@tc_1"`                                      | Headless Chrome                      |
+| CI/CD full     | `npm run test:ci`                                                                   | Headless, minimal logs, no auto-open |
+| CI/CD by tag   | `npx wdio run ./config/wdio.ci.conf.js --suite regression --mochaOpts.grep="@tc_1"` | Override test_tag                    |
+| Dry-run        | `npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run`             | Discovery check                      |
+| Parallel       | `npm run test:parallel`                                                             | maxInstances=10                      |
 
 ## Workflow
 

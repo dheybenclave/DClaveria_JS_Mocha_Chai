@@ -62,7 +62,7 @@ npx wdio run ./config/wdio.local.conf.js --suite regression --dry-run
 ```bash
 npm run test:parallel
 ```
-- Runs all specs with `maxInstances=5`
+- Runs all specs with `maxInstances=10`
 - Each test gets a fresh session via `beforeEach` + `browser.reloadSession()`
 - Global `afterTest` hook clears cookies/storage
 
@@ -94,7 +94,7 @@ Always report:
 | Command | Purpose |
 |---------|---------|
 | `npm run test` | Full regression (maxInstances=10) |
-| `npm run test:parallel` | Parallel run (maxInstances=5) |
+| `npm run test:parallel` | Parallel run (maxInstances=10) |
 | `npm run test:web` | Web specs only |
 | `npm run test:api` | API specs only |
 | `npm run test:tag --tag="@tc_1"` | Specific tag |
